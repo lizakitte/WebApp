@@ -55,6 +55,22 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.projectActive {
+  background-color: salmon;
+}
+
+.featureToDo {
+  background-color: salmon;
+}
+
+.featureDoing {
+  background-color: lightgoldenrodyellow;
+}
+
+.featureDone {
+  background-color: darkseagreen;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

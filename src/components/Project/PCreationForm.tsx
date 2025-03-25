@@ -1,9 +1,10 @@
 import { FormEvent } from "react";
-import "../styles/formStyle.css"
-import { database } from "../lib/data";
+import "../../styles/formStyle.css"
+import { database } from "../../lib/data";
 import { useNavigate } from "react-router";
+import { homePagePath } from "../../lib/pathsNames";
 
-function CreationForm() {
+function PCreationForm() {
     const navigate = useNavigate();
 
     const nameInputName = "projectName";
@@ -36,14 +37,14 @@ function CreationForm() {
 
         pnameInput.value = "";
         descrInput.value = "";
-        navigate("/");
+        navigate(homePagePath);
     }
 
     return ( 
         <>
-            <a href="/">&larr; Back to all 🦛🦛</a>
+            <a onClick={() => navigate(homePagePath)}>&larr; Back to all projects 🦛🦛</a>
             <form onSubmit={onSubmit}>
-                <h1>Create New 🦛</h1>
+                <h1>Create New Project 🦛</h1>
                 <label htmlFor={nameInputName}>Name 🎀🦛</label>
                 <input type="text" id={nameInputName} name={nameInputName} placeholder="Enter name..."></input>
                 <label htmlFor={descrInputName}>Description</label>
@@ -54,4 +55,4 @@ function CreationForm() {
      );
 }
 
-export default CreationForm;
+export default PCreationForm;

@@ -1,25 +1,22 @@
-import { database } from "../lib/data";
-import "../styles/formStyle.css";
-import Modal from "./Modal";
-import React, { useEffect, useState } from "react";
+import { database, Project } from "../../lib/data";
+import { homePagePath } from "../../lib/pathsNames";
+import "../../styles/formStyle.css";
+import Modal from "../Modal";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
-function DeleteForm({ projectId }: { projectId: string }) {
+function PDeleteForm({ projectId }: { projectId: string }) {
   const navigate = useNavigate();
   // const params = useParams();
-  const project = database.getById(projectId);
+  const project = database.getById<Project>("project", projectId);
 
-  const [styleQuestion, setStyleQuestion] = useState<React.CSSProperties>({});
+  const [styleQuestion, setStyleQuestion] = useState<React.CSSProperties>({display: "block"});
   const [styleSuccess, setStyleSuccess] = useState<React.CSSProperties>({});
   const [styleFail, setStyleFail] = useState<React.CSSProperties>({});
 
-  useEffect(() => {
-    setStyleQuestion({ display: "block" });
-  }, []);
-
   function onDelete() {
     setStyleQuestion({display: "none"});
-    if (database.deleteById(projectId)) {
+    if (database.deleteById<Project>("project", projectId)) {
       setStyleSuccess({ display: "block" });
     } else {
       setStyleFail({ display: "block" });
@@ -28,7 +25,6 @@ function DeleteForm({ projectId }: { projectId: string }) {
 
   return (
     <>
-      {/* on close - cancel, on submit - delete and open modal success or fail */}
       <Modal style={styleQuestion} setStyle={setStyleQuestion}>
         <p>Do you really want to delete this record:</p>
         <p>
@@ -45,11 +41,10 @@ function DeleteForm({ projectId }: { projectId: string }) {
         </button>
       </Modal>
 
-      {/* on close - update the display data */}
       <Modal
         style={styleSuccess}
         setStyle={setStyleSuccess}
-        onClose={() => navigate("/")}
+        onClose={() => navigate(homePagePath)}
       >
         <p>Delete was successfull!</p>
       </Modal>
@@ -57,7 +52,7 @@ function DeleteForm({ projectId }: { projectId: string }) {
       <Modal
         style={styleFail}
         setStyle={setStyleFail}
-        onClose={() => navigate("/")}
+        onClose={() => navigate(homePagePath)}
       >
         <p>Sorry! Could not delete.</p>
       </Modal>
@@ -65,4 +60,4 @@ function DeleteForm({ projectId }: { projectId: string }) {
   );
 }
 
-export default DeleteForm;
+export default PDeleteForm;

@@ -2,7 +2,7 @@ label {
     text-align: left;
 }
 
-input[type=text] {
+input[type=text], select {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     width: 100%;
     padding: 12px 20px;
