@@ -1,6 +1,8 @@
 export class LocalStorageDatabase {
   constructor() {
     if (!localStorage.getItem("project")) localStorage.setItem("project", "[]");
+    if (!localStorage.getItem("activeProject"))
+      localStorage.setItem("activeProject", "null");
     if (!localStorage.getItem("feature")) localStorage.setItem("feature", "[]");
     if (!localStorage.getItem("user")) localStorage.setItem("user", "[]");
   }
@@ -52,7 +54,7 @@ export class LocalStorageDatabase {
 
   public getAllFeaturesByProject(projectId?: string): Feature[] {
     const features = this.getAll<Feature>("feature");
-    return features.filter((feature) => (feature.projectId == projectId));
+    return features.filter((feature) => feature.projectId == projectId);
   }
 
   public getById<T extends DatabaseEntry>(
@@ -132,6 +134,23 @@ export class LocalStorageDatabase {
     }
     return false;
   }
+
+  public getActiveProject(): Project | null {
+    const projectId = localStorage.getItem("activeProjectId");
+    if (projectId === null) return null;
+
+    const projects = this.getAll<Project>("project");
+
+    for (const proj of projects) {
+      if (proj.id === projectId) return proj;
+    }
+
+    throw new Error("unreachable");
+  }
+
+  public setActiveProject(project: Project): void {
+    localStorage.setItem("activeProjectId", project.id);
+  }
 }
 
 export type DataType = "project" | "user" | "feature";
@@ -195,11 +214,6 @@ export type UserAction = {
   user: User;
 };
 
-export const initialUserState: UserState = {
-  users: [admin],
-  activeUser: admin,
-};
-
 export function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
     case "activeUserChanged":
@@ -217,12 +231,22 @@ export function userReducer(state: UserState, action: UserAction): UserState {
 
 export type ProjectState = {
   projects: Project[];
-  activeProject?: Project;
+  activeProject: Project | null;
 };
 
-export const initialProjectState : ProjectState = {
-    projects: [],
-    activeProject: undefined,
+export function getInitialProjectState(): ProjectState {
+  return {
+    projects: database.getAll("project"),
+    activeProject: database.getActiveProject(),
+  };
+}
+
+export function getInitialUserState(): UserState {
+  // TODO: 💾🎀🦛
+  return {
+    users: [admin],
+    activeUser: admin,
+  };
 }
 
 export type ProjectActionType = "activeProjectChanged";
@@ -238,9 +262,57 @@ export function projectReducer(
 ): ProjectState {
   switch (action.type) {
     case "activeProjectChanged":
+      database.setActiveProject(action.project);
       return {
         ...state,
         activeProject: action.project,
+      };
+  }
+}
+
+export type FeaturesState = {
+  features: Feature[];
+};
+export type FeatureAction =
+  | {
+      type: "deleteFeature";
+      feature: Feature;
+    }
+  | {
+      type: "updateFeature";
+      id: string;
+      name: string;
+      description: string;
+      priority: Priority;
+      state: FeatureState;
+    };
+
+export function getInitialFeaturesState(): FeaturesState {
+  return { features: database.getAll("feature") };
+}
+
+export function featureReducer(
+  state: FeaturesState,
+  action: FeatureAction
+): FeaturesState {
+  switch (action.type) {
+    case "deleteFeature":
+      database.deleteById("feature", action.feature.id);
+      return {
+        ...state,
+        features: database.getAll("feature"),
+      };
+    case "updateFeature":
+      database.updateFeatureById(
+        action.id,
+        action.name,
+        action.description,
+        action.priority,
+        action.state
+      );
+      return {
+        ...state,
+        features: database.getAll("feature"),
       };
   }
 }

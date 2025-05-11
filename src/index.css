@@ -71,6 +71,30 @@ button:focus-visible {
   background-color: darkseagreen;
 }
 
+.feature {
+    margin-bottom: 16px;
+    padding: 10px;
+    border: 1px solid #aaa;
+    background-color: #f6f6f6;
+    border-radius: 5px;
+
+}
+
+.featureHighPriority {
+  color: crimson;
+  font-weight: bold;
+}
+
+.featureMediumPriority {
+  color: coral;
+  font-weight: bold;
+}
+
+.featureLowPriority {
+  color: green;
+  font-weight: bold;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

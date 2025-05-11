@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router";
-import { database, Project } from "../../lib/data";
 import PDeleteForm from "./PDeleteForm";
 import { useContext, useState } from "react";
 import ProjectContext from "../../lib/ProjectContext";
@@ -7,8 +6,6 @@ import "../../index.css";
 import { createProjectPath, projectFeaturesPath, updateProjectPathId } from "../../lib/pathsNames";
 
 function DisplayProjects() {
-  const data = database.getAll<Project>("project");
-
   const navigate = useNavigate();
   const { state, dispatch } = useContext(ProjectContext);
 
@@ -30,14 +27,9 @@ function DisplayProjects() {
           </tr>
         </thead>
         <tbody>
-          {data.map((project) => {
+          {state.projects.map((project) => {
             return (
-              <tr
-                className={
-                  project.id === state.activeProject?.id ? "projectActive" : ""
-                }
-                key={project.id}
-              >
+              <tr>
                 <td>{project.name}</td>
                 <td>{project.description}</td>
                 <td>

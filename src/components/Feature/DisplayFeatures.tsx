@@ -1,24 +1,29 @@
 import { useNavigate } from "react-router";
-import { database } from "../../lib/data";
 import ProjectContext from "../../lib/ProjectContext";
-import { useContext, useState } from "react";
-import FDeleteForm from "./FDeleteForm";
-import { createFeaturePath, featureDetailsPathId, homePagePath, updateFeaturePathId } from "../../lib/pathsNames";
+import { useContext } from "react";
+import {
+  createFeaturePath,
+  homePagePath,
+} from "../../lib/pathsNames";
+import FeatureDetails from "./FeatureDetails";
+import FeatureContext from "../../lib/FeatureContext";
 
 function DisplayFeatures() {
-  
   const navigate = useNavigate();
-  const { state, dispatch } = useContext(ProjectContext);
-  
-  const data = database.getAllFeaturesByProject(state.activeProject?.id);
+  const { state: projectState } = useContext(ProjectContext);
+  const { state: featureState } = useContext(FeatureContext);
 
-  const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
+  const features = featureState.features.filter((feature) => feature.projectId === projectState.activeProject?.id)
+  const allFeaturesToDo = features.filter((feature) => feature.state == "todo");
+  const allFeaturesDoing = features.filter(
+    (feature) => feature.state == "doing"
+  );
+  const allFeaturesDone = features.filter((feature) => feature.state == "done");
 
   return (
     <div>
       <a onClick={() => navigate(homePagePath)}>&larr; Back to projects 🦛🦛</a>
       <div>
-        {deleteFeatureId && <FDeleteForm featureId={deleteFeatureId} />}
         <button
           className="formSubmitButton"
           onClick={() => navigate(createFeaturePath)}
@@ -26,57 +31,33 @@ function DisplayFeatures() {
           Add new
         </button>
         <h1>Here are the features for the project: 🦛</h1>
+
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Actions</th>
+              <th className="featureToDo">TODO</th>
+              <th className="featureDoing">IN PROGRESS</th>
+              <th className="featureDone">DONE</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((feature) => {
-              let featureStateStyle;
-              switch (feature.state) {
-                case "todo":
-                  featureStateStyle = "featureToDo";
-                  break;
-                case "doing":
-                  featureStateStyle = "featureDoing";
-                  break;
-                case "done":
-                  featureStateStyle = "featureDone";
-                  break;
-                default:
-                  break;
-              }
-              return (
-                <tr className={featureStateStyle}>
-                  <td style={{cursor: "pointer"}} onClick={() => navigate(`${featureDetailsPathId}/${feature.id}`)}>{feature.name}</td>
-                  <td style={{cursor: "pointer"}} onClick={() => navigate(`${featureDetailsPathId}/${feature.id}`)}>{feature.description}</td>
-                  <td>
-                    <button
-                      className="formUpdateButton"
-                      onClick={() => navigate(`${updateFeaturePathId}/${feature.id}`)}
-                    >
-                      Update
-                    </button>
-                    <button
-                      className="formDeleteButton"
-                      onClick={() => setDeleteFeatureId(feature.id)}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="formSubmitButton"
-                      onClick={() => navigate(`${featureDetailsPathId}/${feature.id}`)}
-                    >
-                      See more
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            <tr>
+              <td style={{verticalAlign: "top"}}>
+                {allFeaturesToDo.map((feature) => (
+                  <FeatureDetails featureId={feature.id} />
+                ))}
+              </td>
+              <td style={{verticalAlign: "top"}}>
+                {allFeaturesDoing.map((feature) => (
+                  <FeatureDetails featureId={feature.id} />
+                ))}
+              </td>
+              <td style={{verticalAlign: "top"}}>
+                {allFeaturesDone.map((feature) => (
+                  <FeatureDetails featureId={feature.id} />
+                ))}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

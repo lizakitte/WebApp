@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Modal from "../Modal";
 import { database, Feature } from "../../lib/data";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { projectFeaturesPath } from "../../lib/pathsNames";
+import FeatureContext from "../../lib/FeatureContext";
 
-function FDeleteForm({featureId}: {featureId: string}) {
+function FDeleteForm({ featureId }: { featureId: string }) {
+  const { dispatch } = useContext(FeatureContext);
   const navigate = useNavigate();
 
   const feature = database.getById<Feature>("feature", featureId);
@@ -17,6 +19,7 @@ function FDeleteForm({featureId}: {featureId: string}) {
 
   function onDelete() {
     setStyleQuestion({ display: "none" });
+    dispatch({ type: "deleteFeature", feature: database.getById("feature", featureId)! })
     if (database.deleteById<Feature>("feature", featureId)) {
       setStyleSuccess({ display: "block" });
     } else {
