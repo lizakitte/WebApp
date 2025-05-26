@@ -15,13 +15,12 @@ function FUpdateForm() {
   const feature = database.getById<Feature>("feature", params.featureId!)!;
   const nameInputName = "featureName";
   const descrInputName = "featureDescription";
-  const ownerInputName = "featureOwner";
+  // const ownerInputName = "featureOwner";
   const priorityInputName = "featurePriority";
   const startDateInputName = "featureStartDate";
   const stateInputName = "featureState";
 
   const [styleSuccess, setStyleSuccess] = useState<React.CSSProperties>({});
-  const [styleFail, setStyleFail] = useState<React.CSSProperties>({});
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -139,14 +138,6 @@ function FUpdateForm() {
         onClose={() => navigate(projectFeaturesPath)}
       >
         <p>Update was successfull!</p>
-      </Modal>
-
-      <Modal
-        style={styleFail}
-        setStyle={setStyleFail}
-        onClose={() => navigate(projectFeaturesPath)}
-      >
-        <p>Sorry! Could not update.</p>
       </Modal>
     </div>
   );

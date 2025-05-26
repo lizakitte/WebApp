@@ -1,26 +1,26 @@
 import { database, Project } from "../../lib/data";
 import { homePagePath } from "../../lib/pathsNames";
+import ProjectContext from "../../lib/ProjectContext";
 import "../../styles/formStyle.css";
 import Modal from "../Modal";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 
 function PDeleteForm({ projectId }: { projectId: string }) {
   const navigate = useNavigate();
-  // const params = useParams();
+  const { dispatch } = useContext(ProjectContext);
   const project = database.getById<Project>("project", projectId);
 
   const [styleQuestion, setStyleQuestion] = useState<React.CSSProperties>({display: "block"});
   const [styleSuccess, setStyleSuccess] = useState<React.CSSProperties>({});
-  const [styleFail, setStyleFail] = useState<React.CSSProperties>({});
 
   function onDelete() {
     setStyleQuestion({display: "none"});
-    if (database.deleteById<Project>("project", projectId)) {
-      setStyleSuccess({ display: "block" });
-    } else {
-      setStyleFail({ display: "block" });
-    }
+    dispatch({
+      type: "deleteProject",
+      id: projectId,
+    })
+    setStyleSuccess({ display: "block" });
   }
 
   return (
@@ -47,14 +47,6 @@ function PDeleteForm({ projectId }: { projectId: string }) {
         onClose={() => navigate(homePagePath)}
       >
         <p>Delete was successfull!</p>
-      </Modal>
-
-      <Modal
-        style={styleFail}
-        setStyle={setStyleFail}
-        onClose={() => navigate(homePagePath)}
-      >
-        <p>Sorry! Could not delete.</p>
       </Modal>
     </>
   );

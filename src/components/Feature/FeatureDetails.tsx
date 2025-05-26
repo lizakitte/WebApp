@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { database, Feature } from "../../lib/data";
-import { featureDetailsPathId, updateFeaturePathId } from "../../lib/pathsNames";
+import { updateFeaturePathId } from "../../lib/pathsNames";
 import { useState } from "react";
 import FDeleteForm from "./FDeleteForm";
 

@@ -1,12 +1,14 @@
 import { useNavigate, useParams } from "react-router";
 import "../../styles/formStyle.css";
 import { database, Project } from "../../lib/data";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useContext, useState } from "react";
 import Modal from "../Modal";
 import { homePagePath } from "../../lib/pathsNames";
+import ProjectContext from "../../lib/ProjectContext";
 
 function PUpdateForm() {
   const navigate = useNavigate();
+  const { dispatch } = useContext(ProjectContext);
 
   const params = useParams();
   const project = database.getById<Project>("project", params.id!)!;
@@ -14,7 +16,6 @@ function PUpdateForm() {
   const descrInputName = "projectDescription";
 
   const [styleSuccess, setStyleSuccess] = useState<React.CSSProperties>({});
-  const [styleFail, setStyleFail] = useState<React.CSSProperties>({});
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -43,12 +44,13 @@ function PUpdateForm() {
     const pname = pnameInput.value;
     const descr = descrInput.value;
 
-    if (database.updateProjectById(project.id, pname, descr)) {
-      setStyleSuccess({ display: "block" });
-    }
-    else {
-        setStyleFail({display: "block"});
-    }
+    dispatch({
+      type: "updateProject",
+      id: project.id,
+      name: pname,
+      description: descr,
+    })
+    setStyleSuccess({ display: "block" });
   }
 
   return (
@@ -79,10 +81,6 @@ function PUpdateForm() {
       </form>
       <Modal style={styleSuccess} setStyle={setStyleSuccess} onClose={() => navigate(homePagePath)}>
         <p>Update was successfull!</p>
-      </Modal>
-
-      <Modal style={styleFail} setStyle={setStyleFail} onClose={() => navigate(homePagePath)}>
-          <p>Sorry! Could not update.</p>
       </Modal>
     </>
   );

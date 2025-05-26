@@ -1,13 +1,14 @@
 import { FormEvent, useContext } from "react";
 import "../../styles/formStyle.css";
-import { database } from "../../lib/data";
 import { useNavigate } from "react-router";
 import ProjectContext from "../../lib/ProjectContext";
 import { projectFeaturesPath } from "../../lib/pathsNames";
+import FeatureContext from "../../lib/FeatureContext";
 
 function FCreationForm() {
   const navigate = useNavigate();
-  const { state, dispatch } = useContext(ProjectContext);
+  const { state: projectState } = useContext(ProjectContext);
+  const { dispatch: featureDispatch } = useContext(FeatureContext);
 
   const nameInputName = "featureName";
   const descrInputName = "featureDescription";
@@ -49,18 +50,19 @@ function FCreationForm() {
         throw new Error("Unknown priority!🦛");
     }
 
-    if(state.activeProject === undefined) {
+    if(projectState.activeProject === undefined) {
         throw new Error("No project is chosen as active!");
     }
 
-    database.createFeature(
-      fname,
-      descr,
+    featureDispatch({
+      type: "createFeature",
+      name: fname,
+      description: descr,
       priority,
-      state.activeProject.id,
-      new Date().toISOString().split("T")[0],
-      "todo",
-    );
+      projectId: projectState.activeProject!.id,
+      startDate: new Date().toISOString().split("T")[0],
+      state: "todo",
+  });
 
     fnameInput.value = "";
     descrInput.value = "";

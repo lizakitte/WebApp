@@ -5,6 +5,7 @@ export class LocalStorageDatabase {
       localStorage.setItem("activeProject", "null");
     if (!localStorage.getItem("feature")) localStorage.setItem("feature", "[]");
     if (!localStorage.getItem("user")) localStorage.setItem("user", "[]");
+    if (!localStorage.getItem("task")) localStorage.setItem("task", "[]");
   }
 
   public createProject(name: string, description: string): void {
@@ -47,6 +48,33 @@ export class LocalStorageDatabase {
     localStorage.setItem("feature", JSON.stringify(features));
   }
 
+  public createTask(
+    name: string,
+    description: string,
+    priority: Priority,
+    featureId: string,
+    estimatedTime: string,
+    state: FeatureState,
+    addDate: string,
+  ) {
+    const id = crypto.randomUUID();
+
+    const task: Task = {
+      id,
+      name,
+      description,
+      priority,
+      featureId,
+      estimatedTime,
+      state,
+      addDate
+    };
+
+    const tasks = this.getAll<Task>("task");
+    tasks.push(task);
+    localStorage.setItem("task", JSON.stringify(tasks));
+  }
+
   public getAll<T extends DatabaseEntry>(type: DataType): T[] {
     const projectArrayStr = localStorage.getItem(type)!;
     return JSON.parse(projectArrayStr);
@@ -55,6 +83,11 @@ export class LocalStorageDatabase {
   public getAllFeaturesByProject(projectId?: string): Feature[] {
     const features = this.getAll<Feature>("feature");
     return features.filter((feature) => feature.projectId == projectId);
+  }
+
+  public getAllTasksByFeature(featureId?: string): Task[] {
+    const tasks = this.getAll<Task>("task");
+    return tasks.filter((task) => task.featureId == featureId);
   }
 
   public getById<T extends DatabaseEntry>(
@@ -95,7 +128,7 @@ export class LocalStorageDatabase {
   ): boolean {
     const projects = this.getAll<Project>("project");
     for (let i = 0; i < projects.length; i++) {
-      if (projects[i].id == id) {
+      if (projects[i].id === id) {
         projects[i] = {
           id,
           name,
@@ -117,7 +150,7 @@ export class LocalStorageDatabase {
   ): boolean {
     const features = this.getAll<Feature>("feature");
     for (let i = 0; i < features.length; i++) {
-      if (features[i].id == id) {
+      if (features[i].id === id) {
         features[i] = {
           id,
           name,
@@ -135,6 +168,40 @@ export class LocalStorageDatabase {
     return false;
   }
 
+  public updateTaskById(
+    id: string,
+    name: string,
+    description: string,
+    priority: Priority,
+    estimatedTime: string,
+    state: FeatureState,
+    startDate: string,
+    endDate: string,
+    ownerId: string
+  ): boolean {
+    const tasks = this.getAll<Task>("task");
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) {
+        tasks[i] = {
+          id,
+          name,
+          description,
+          priority,
+          estimatedTime,
+          state,
+          featureId: tasks[i].featureId,
+          addDate: tasks[i].addDate,
+          startDate,
+          endDate,
+          ownerId,
+        };
+        localStorage.setItem("task", JSON.stringify(tasks));
+        return true;
+      }
+    }
+    return false;
+  }
+
   public getActiveProject(): Project | null {
     const projectId = localStorage.getItem("activeProjectId");
     if (projectId === null) return null;
@@ -144,16 +211,31 @@ export class LocalStorageDatabase {
     for (const proj of projects) {
       if (proj.id === projectId) return proj;
     }
-
     throw new Error("unreachable");
   }
 
   public setActiveProject(project: Project): void {
     localStorage.setItem("activeProjectId", project.id);
   }
+
+  public getActiveFeature(): Feature | null {
+    const featureId = localStorage.getItem("activeFeatureId");
+    if(featureId == null) return null;
+    
+    const features = this.getAll<Feature>("feature");
+
+    for (const feature of features) {
+      if (feature.id === featureId) return feature;
+    }
+    throw new Error("unreachable");
+  }
+
+  public setActiveFeature(feature: Feature): void {
+    localStorage.setItem("activeFeatureId", feature.id);
+  }
 }
 
-export type DataType = "project" | "user" | "feature";
+export type DataType = "project" | "user" | "feature" | "task";
 
 export type Project = {
   id: string;
@@ -172,6 +254,20 @@ export type Feature = {
   ownerId: string;
 };
 
+export type Task = {
+  id: string;
+  name: string;
+  description: string;
+  priority: Priority;
+  featureId: string;
+  estimatedTime: string;
+  state: FeatureState;
+  addDate: string;
+  startDate?: string;
+  endDate?: string;
+  ownerId?: string;
+};
+
 export type Priority = "low" | "medium" | "high";
 export type FeatureState = "todo" | "doing" | "done";
 
@@ -179,6 +275,7 @@ type DatabaseEntries = {
   project: Project;
   user: User;
   feature: Feature;
+  task: Task;
 };
 
 type DatabaseKey = keyof DatabaseEntries;
@@ -200,6 +297,20 @@ const admin: User = {
   name: "Hipa",
   surname: "Dripa",
   role: "admin",
+};
+
+const developer: User = {
+  id: "sillyHippoDeveloper",
+  name: "Hipo",
+  surname: "Dripo",
+  role: "developer",
+};
+
+const devops: User = {
+  id: "sillyHippoDevops",
+  name: "Larry",
+  surname: "Devops",
+  role: "devops",
 };
 
 export type UserState = {
@@ -242,19 +353,32 @@ export function getInitialProjectState(): ProjectState {
 }
 
 export function getInitialUserState(): UserState {
-  // TODO: 💾🎀🦛
   return {
-    users: [admin],
+    users: [admin, developer, devops],
     activeUser: admin,
   };
 }
 
-export type ProjectActionType = "activeProjectChanged";
-
-export type ProjectAction = {
-  type: ProjectActionType;
+export type ProjectAction = 
+| {
+  type: "activeProjectChanged";
   project: Project;
-};
+  } 
+| {
+  type: "createProject";
+  name: string;
+  description: string;
+}
+| {
+  type: "deleteProject";
+  id: string;
+}
+| {
+  type: "updateProject";
+  id: string;
+  name: string;
+  description: string;
+}
 
 export function projectReducer(
   state: ProjectState,
@@ -267,16 +391,36 @@ export function projectReducer(
         ...state,
         activeProject: action.project,
       };
+    case "createProject":
+      database.createProject(action.name, action.description);
+      return {
+        ...state,
+        projects: database.getAll("project"),
+      };
+    case "deleteProject":
+      database.deleteById("project", action.id);
+      return {
+        ...state,
+        projects: database.getAll("project"),
+      };
+    case "updateProject":
+      database.updateProjectById(action.id, action.name, action.description);
+      return {
+        ...state,
+        projects: database.getAll("project"),
+      };
   }
 }
 
 export type FeaturesState = {
   features: Feature[];
+  activeFeature: Feature | null;
 };
+
 export type FeatureAction =
   | {
       type: "deleteFeature";
-      feature: Feature;
+      id: string;
     }
   | {
       type: "updateFeature";
@@ -285,10 +429,26 @@ export type FeatureAction =
       description: string;
       priority: Priority;
       state: FeatureState;
-    };
+    }
+  | {
+      type: "createFeature";
+      name: string;
+      description: string;
+      priority: Priority;
+      projectId: string;
+      startDate: string;
+      state: FeatureState;
+    }
+  | {
+      type: "activeFeatureChanged";
+      feature: Feature;
+  };
 
 export function getInitialFeaturesState(): FeaturesState {
-  return { features: database.getAll("feature") };
+  return { 
+    features: database.getAll("feature"),
+    activeFeature: null,
+  };
 }
 
 export function featureReducer(
@@ -296,8 +456,14 @@ export function featureReducer(
   action: FeatureAction
 ): FeaturesState {
   switch (action.type) {
+    case "activeFeatureChanged":
+      database.setActiveFeature(action.feature);
+      return {
+        ...state,
+        activeFeature: action.feature,
+      }
     case "deleteFeature":
-      database.deleteById("feature", action.feature.id);
+      database.deleteById("feature", action.id);
       return {
         ...state,
         features: database.getAll("feature"),
@@ -314,5 +480,101 @@ export function featureReducer(
         ...state,
         features: database.getAll("feature"),
       };
+    case "createFeature":
+      database.createFeature(
+        action.name,
+        action.description,
+        action.priority,
+        action.projectId,
+        action.startDate,
+        action.state
+      );
+      return {
+        ...state,
+        features: database.getAll("feature"),
+      };
+  }
+}
+
+export type TaskState = {
+  tasks: Task[];
+};
+
+export type TaskAction =
+  | {
+      type: "deleteTask";
+      task: Task;
+    }
+  | {
+      type: "createTask";
+      id: string;
+      name: string;
+      description: string;
+      priority: Priority;
+      featureId: string;
+      estimatedTime: string;
+      state: FeatureState;
+      addDate: string;
+    }
+  | {
+      type: "updateTask";
+      id: string;
+      name: string;
+      description: string;
+      priority: Priority;
+      featureId: string;
+      estimatedTime: string;
+      state: FeatureState;
+      addDate: string;
+      startDate: string;
+      endDate: string;
+      ownerId: string;
+    };
+
+export function getInitialTaskState(): TaskState {
+  return { tasks: database.getAll("task") };
+}
+
+export function taskReducer(
+  state: TaskState,
+  action: TaskAction
+): TaskState {
+  switch (action.type) {
+    case "createTask":
+      database.createTask(
+        action.name, 
+        action.description, 
+        action.priority, 
+        action.featureId, 
+        action.estimatedTime,
+        action.state,
+        action.addDate,
+      )
+      return {
+        ...state,
+        tasks: database.getAll("task"),
+      }
+    case "deleteTask":
+      database.deleteById("feature", action.task.id);
+      return {
+        ...state,
+        tasks: database.getAll("task"),
+      };
+    case "updateTask":
+      database.updateTaskById(
+        action.id,
+        action.name,
+        action.description,
+        action.priority,
+        action.estimatedTime,
+        action.state,
+        action.startDate,
+        action.endDate,
+        action.ownerId,
+      )
+      return {
+        ...state,
+        tasks: database.getAll("task"),
+      }
   }
 }

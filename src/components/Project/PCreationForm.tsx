@@ -1,11 +1,12 @@
-import { FormEvent } from "react";
+import { FormEvent, useContext } from "react";
 import "../../styles/formStyle.css"
-import { database } from "../../lib/data";
 import { useNavigate } from "react-router";
 import { homePagePath } from "../../lib/pathsNames";
+import ProjectContext from "../../lib/ProjectContext";
 
 function PCreationForm() {
     const navigate = useNavigate();
+    const { dispatch } = useContext(ProjectContext);
 
     const nameInputName = "projectName";
     const descrInputName = "projectDescription"
@@ -33,7 +34,11 @@ function PCreationForm() {
         const pname = pnameInput.value;
         const descr = descrInput.value;
 
-        database.createProject(pname, descr);
+        dispatch({
+            type: "createProject",
+            name: pname,
+            description: descr
+        })
 
         pnameInput.value = "";
         descrInput.value = "";
