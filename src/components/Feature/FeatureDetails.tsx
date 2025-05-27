@@ -1,19 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { database, Feature } from "../../lib/data";
-import { updateFeaturePathId } from "../../lib/pathsNames";
-import { useState } from "react";
+import { featureTasksPath, updateFeaturePathId } from "../../lib/pathsNames";
+import { useContext, useState } from "react";
 import FDeleteForm from "./FDeleteForm";
+import FeatureContext from "../../lib/FeatureContext";
 
 function FeatureDetails({ featureId }: { featureId?: string }) {
   const params = useParams();
   const navigate = useNavigate();
+
+  const { dispatch } = useContext(FeatureContext);
+
   const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
-  
+
   if (featureId === undefined) {
     featureId = params.featureId;
-    if (featureId === undefined) throw new Error("Could not get the feature id");
+    if (featureId === undefined)
+      throw new Error("Could not get the feature id");
   }
-  
+
   const feature = database.getById<Feature>("feature", featureId);
   if (feature === null) {
     throw new Error("Why feature null?");
@@ -36,7 +41,9 @@ function FeatureDetails({ featureId }: { featureId?: string }) {
 
   return (
     <div className="feature">
-      {deleteFeatureId && <FDeleteForm featureId={deleteFeatureId}></FDeleteForm>}
+      {deleteFeatureId && (
+        <FDeleteForm featureId={deleteFeatureId}></FDeleteForm>
+      )}
       {/* <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to all features 🦛🦛</a>
             <h1>Feature details:</h1> */}
       <h3>{feature.name}</h3>
@@ -66,6 +73,18 @@ function FeatureDetails({ featureId }: { featureId?: string }) {
         onClick={() => setDeleteFeatureId(feature.id)}
       >
         Delete
+      </button>
+      <button
+        className="formSubmitButton"
+        onClick={() => {
+          dispatch({
+            type: "activeFeatureChanged",
+            feature,
+          });
+          navigate(featureTasksPath);
+        }}
+      >
+        View Tasks
       </button>
     </div>
   );

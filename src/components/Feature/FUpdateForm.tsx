@@ -6,7 +6,6 @@ import Modal from "../Modal";
 import FeatureContext from "../../lib/FeatureContext";
 
 function FUpdateForm() {
-  // NEED TO CHANGE
   const navigate = useNavigate();
 
   const { dispatch } = useContext(FeatureContext);

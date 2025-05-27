@@ -33,6 +33,7 @@ import {
   taskDetailsPathId,
   updateFeaturePathId,
   updateProjectPathId,
+  updateTaskDisabledPathId,
   updateTaskPathId,
 } from "./lib/pathsNames.ts";
 import FeatureContext from "./lib/FeatureContext.ts";
@@ -42,6 +43,7 @@ import TaskCreationForm from "./components/Task/TaskCreationForm.tsx";
 import TaskUpdateForm from "./components/Task/TaskUpdateForm.tsx";
 import TaskDeleteForm from "./components/Task/TaskDeleteForm.tsx";
 import TaskDetails from "./components/Task/TaskDetails.tsx";
+import TaskUpdateDisabled from "./components/Task/TaskUpdateDisabled.tsx";
 
 function App() {
   const [userState, userDispatch] = useReducer(
@@ -101,6 +103,10 @@ function App() {
                 <Route
                   path={`${updateTaskPathId}/:taskId`}
                   element={<TaskUpdateForm />}
+                />
+                <Route
+                  path={`${updateTaskDisabledPathId}/:taskId`}
+                  element={<TaskUpdateDisabled />}
                 />
                 <Route
                   path={`${taskDeletePathId}/:taskId`}

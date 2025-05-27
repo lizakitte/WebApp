@@ -10,5 +10,6 @@ export const featureDetailsPathId = "/featureDetails";
 export const featureTasksPath = "/featureTasks";
 export const createTaskPath = "/createTask";
 export const updateTaskPathId = "/updateTask";
+export const updateTaskDisabledPathId = "/viewTask";
 export const taskDetailsPathId = "/taskDetails";
 export const taskDeletePathId = "/deleteTask";

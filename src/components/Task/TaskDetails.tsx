@@ -1,10 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { database, Feature, Task, User } from "../../lib/data";
+import { updateTaskDisabledPathId } from "../../lib/pathsNames";
+import { useState } from "react";
+import TaskDeleteForm from "./TaskDeleteForm";
 
 function TaskDetails({ taskId }: { taskId?: string }) {
   const params = useParams();
-  // const navigate = useNavigate();
-  //   const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
+  const navigate = useNavigate();
+    const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
 
   if (taskId === undefined) {
     taskId = params.taskId;
@@ -21,29 +24,31 @@ function TaskDetails({ taskId }: { taskId?: string }) {
     throw new Error("Why feature null?");
   }
 
-  const owner =
-    database.getById<User>("user", task.ownerId)?.name ?? "No owner";
-
-  let priorityClass = "task";
-  switch (task.priority) {
-    case "high":
-      priorityClass = "taskHighPriority";
-      break;
-    case "medium":
-      priorityClass = "taskMediumPriority";
-      break;
-    case "low":
-      priorityClass = "taskfeatureLowPriority";
-      break;
-    default:
-      break;
+  let owner: string;
+  if (task.ownerId !== undefined) {
+    owner = database.getById<User>("user", task.ownerId)?.name ?? "No owner"
+  } else {
+    owner = "No owner";
   }
+
+  // let priorityClass = "task";
+  // switch (task.priority) {
+  //   case "high":
+  //     priorityClass = "taskHighPriority";
+  //     break;
+  //   case "medium":
+  //     priorityClass = "taskMediumPriority";
+  //     break;
+  //   case "low":
+  //     priorityClass = "taskLowPriority";
+  //     break;
+  //   default:
+  //     break;
+  // }
 
   return (
     <div className="task">
-      {/* {deleteFeatureId && <FDeleteForm featureId={deleteFeatureId}></FDeleteForm>} */}
-      {/* <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to all features 🦛🦛</a>
-            <h1>Feature details:</h1> */}
+      {deleteFeatureId && <TaskDeleteForm taskId={deleteFeatureId}></TaskDeleteForm>}
       <h3>{task.name}</h3>
       <p>
         <span style={{ fontWeight: "bold" }}>Description: </span>
@@ -60,18 +65,18 @@ function TaskDetails({ taskId }: { taskId?: string }) {
         <span style={{ fontWeight: "bold" }}>Owner: </span>
         {owner}
       </p>
-      {/* <button
-        className="formUpdateButton"
-        onClick={() => navigate(`${updateFeaturePathId}/${task.id}`)}
+      <button
+        className="formSubmitButton"
+        onClick={() => navigate(`${updateTaskDisabledPathId}/${task.id}`)}
       >
-        Update
+        View more or update
       </button>
       <button
         className="formDeleteButton"
         onClick={() => setDeleteFeatureId(task.id)}
       >
         Delete
-      </button> */}
+      </button>
     </div>
   );
 }

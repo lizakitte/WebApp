@@ -4,7 +4,8 @@ export class LocalStorageDatabase {
     if (!localStorage.getItem("activeProject"))
       localStorage.setItem("activeProject", "null");
     if (!localStorage.getItem("feature")) localStorage.setItem("feature", "[]");
-    if (!localStorage.getItem("user")) localStorage.setItem("user", "[]");
+    if (!localStorage.getItem("user"))
+      localStorage.setItem("user", JSON.stringify([admin, developer, devops]));
     if (!localStorage.getItem("task")) localStorage.setItem("task", "[]");
   }
 
@@ -40,7 +41,7 @@ export class LocalStorageDatabase {
       projectId,
       startDate,
       state,
-      ownerId: "sillyHippoAdmin",
+      ownerId: admin.id,
     };
 
     const features = this.getAll<Feature>("feature");
@@ -56,6 +57,7 @@ export class LocalStorageDatabase {
     estimatedTime: string,
     state: FeatureState,
     addDate: string,
+    ownerId: string | undefined
   ) {
     const id = crypto.randomUUID();
 
@@ -67,7 +69,8 @@ export class LocalStorageDatabase {
       featureId,
       estimatedTime,
       state,
-      addDate
+      addDate,
+      ownerId,
     };
 
     const tasks = this.getAll<Task>("task");
@@ -177,7 +180,7 @@ export class LocalStorageDatabase {
     state: FeatureState,
     startDate: string,
     endDate: string,
-    ownerId: string
+    ownerId: string | undefined,
   ): boolean {
     const tasks = this.getAll<Task>("task");
     for (let i = 0; i < tasks.length; i++) {
@@ -220,8 +223,8 @@ export class LocalStorageDatabase {
 
   public getActiveFeature(): Feature | null {
     const featureId = localStorage.getItem("activeFeatureId");
-    if(featureId == null) return null;
-    
+    if (featureId == null) return null;
+
     const features = this.getAll<Feature>("feature");
 
     for (const feature of features) {
@@ -283,14 +286,6 @@ type DatabaseEntry = DatabaseEntries[DatabaseKey];
 
 export type UserRole = "admin" | "devops" | "developer";
 
-export const database = new LocalStorageDatabase();
-
-export type User = {
-  id: string;
-  name: string;
-  surname: string;
-  role: UserRole;
-};
 
 const admin: User = {
   id: "sillyHippoAdmin",
@@ -311,6 +306,15 @@ const devops: User = {
   name: "Larry",
   surname: "Devops",
   role: "devops",
+};
+
+export const database = new LocalStorageDatabase();
+
+export type User = {
+  id: string;
+  name: string;
+  surname: string;
+  role: UserRole;
 };
 
 export type UserState = {
@@ -354,31 +358,31 @@ export function getInitialProjectState(): ProjectState {
 
 export function getInitialUserState(): UserState {
   return {
-    users: [admin, developer, devops],
+    users: database.getAll("user"),
     activeUser: admin,
   };
 }
 
-export type ProjectAction = 
-| {
-  type: "activeProjectChanged";
-  project: Project;
-  } 
-| {
-  type: "createProject";
-  name: string;
-  description: string;
-}
-| {
-  type: "deleteProject";
-  id: string;
-}
-| {
-  type: "updateProject";
-  id: string;
-  name: string;
-  description: string;
-}
+export type ProjectAction =
+  | {
+      type: "activeProjectChanged";
+      project: Project;
+    }
+  | {
+      type: "createProject";
+      name: string;
+      description: string;
+    }
+  | {
+      type: "deleteProject";
+      id: string;
+    }
+  | {
+      type: "updateProject";
+      id: string;
+      name: string;
+      description: string;
+    };
 
 export function projectReducer(
   state: ProjectState,
@@ -442,12 +446,12 @@ export type FeatureAction =
   | {
       type: "activeFeatureChanged";
       feature: Feature;
-  };
+    };
 
 export function getInitialFeaturesState(): FeaturesState {
-  return { 
+  return {
     features: database.getAll("feature"),
-    activeFeature: null,
+    activeFeature: database.getActiveFeature(),
   };
 }
 
@@ -461,7 +465,7 @@ export function featureReducer(
       return {
         ...state,
         activeFeature: action.feature,
-      }
+      };
     case "deleteFeature":
       database.deleteById("feature", action.id);
       return {
@@ -503,11 +507,10 @@ export type TaskState = {
 export type TaskAction =
   | {
       type: "deleteTask";
-      task: Task;
+      id: string;
     }
   | {
       type: "createTask";
-      id: string;
       name: string;
       description: string;
       priority: Priority;
@@ -515,6 +518,7 @@ export type TaskAction =
       estimatedTime: string;
       state: FeatureState;
       addDate: string;
+      ownerId: string | undefined;
     }
   | {
       type: "updateTask";
@@ -525,37 +529,34 @@ export type TaskAction =
       featureId: string;
       estimatedTime: string;
       state: FeatureState;
-      addDate: string;
       startDate: string;
       endDate: string;
-      ownerId: string;
+      ownerId: string | undefined;
     };
 
 export function getInitialTaskState(): TaskState {
   return { tasks: database.getAll("task") };
 }
 
-export function taskReducer(
-  state: TaskState,
-  action: TaskAction
-): TaskState {
+export function taskReducer(state: TaskState, action: TaskAction): TaskState {
   switch (action.type) {
     case "createTask":
       database.createTask(
-        action.name, 
-        action.description, 
-        action.priority, 
-        action.featureId, 
+        action.name,
+        action.description,
+        action.priority,
+        action.featureId,
         action.estimatedTime,
         action.state,
         action.addDate,
-      )
+        action.ownerId
+      );
       return {
         ...state,
         tasks: database.getAll("task"),
-      }
+      };
     case "deleteTask":
-      database.deleteById("feature", action.task.id);
+      database.deleteById("task", action.id);
       return {
         ...state,
         tasks: database.getAll("task"),
@@ -570,11 +571,11 @@ export function taskReducer(
         action.state,
         action.startDate,
         action.endDate,
-        action.ownerId,
-      )
+        action.ownerId
+      );
       return {
         ...state,
         tasks: database.getAll("task"),
-      }
+      };
   }
 }
