@@ -52,7 +52,7 @@ app.post("/login", (req, res) => {
 app.post("/register", (req, res) => {
   const { name, surname, password } = req.body;
 
-  const existingUser = users.find((user) => user.name === name && user.surname === surname && user.password === password);
+  const existingUser = users.find((user) => user.name === name && user.surname === surname);
   if (existingUser) {
     res.status(400).send();
     return;

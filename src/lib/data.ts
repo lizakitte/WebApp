@@ -257,7 +257,8 @@ export class LocalStorageDatabase {
       if (user.id === activeUserId) return user;
     }
 
-    throw new Error(`User with id '${activeUserId}' does not exist!`);
+    localStorage.removeItem("activeUserId");
+    return undefined;
   }
 
   public async refreshUserTokenIfNeeded(): Promise<boolean> {
@@ -330,6 +331,9 @@ export class LocalStorageDatabase {
     if (!response.ok) return;
 
     const credentials = await response.json() as UserCredentials;
+    const users = this.getAll<User>("user");
+    users.push(credentials.user);
+    localStorage.setItem("user", JSON.stringify(users));
     return credentials;
   }
 
