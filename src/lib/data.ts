@@ -1,3 +1,5 @@
+const API_PATH = "http://localhost:3000";
+
 export class LocalStorageDatabase {
   constructor() {
     if (!localStorage.getItem("project")) localStorage.setItem("project", "[]");
@@ -236,7 +238,108 @@ export class LocalStorageDatabase {
   public setActiveFeature(feature: Feature): void {
     localStorage.setItem("activeFeatureId", feature.id);
   }
+
+  public setActiveUser(user: User): void {
+    localStorage.setItem("activeUserId", user.id);
+  }
+
+  public setUserToken(token: string, refreshToken: string): void {
+    localStorage.setItem("userToken", `{"token": "${token}", "refreshToken": "${refreshToken}"}`);
+  }
+
+  public getActiveUser(): User | undefined {
+    const activeUserId = localStorage.getItem("activeUserId");
+    if (!activeUserId) return undefined;
+
+    const users = this.getAll<User>("user");
+
+    for (const user of users) {
+      if (user.id === activeUserId) return user;
+    }
+
+    throw new Error(`User with id '${activeUserId}' does not exist!`);
+  }
+
+  public async refreshUserTokenIfNeeded(): Promise<boolean> {
+    const userTokenString = localStorage.getItem("userToken");
+    if (!userTokenString) throw new Error("User has no token!");
+
+    const userToken = JSON.parse(userTokenString);
+
+    const resp = await fetch(`${API_PATH}/refreshToken`, {
+      method: "POST",
+      body: `{"refreshToken": "${userToken.refreshToken}"}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resp.ok) {
+      this.logoutCurrentUser();
+      return false;
+    }
+
+    const { token, refreshToken } = await resp.json();
+    this.setUserToken(token, refreshToken);
+    return true;
+  }
+
+  public async loginUser(loginParams: LoginParams): Promise<UserCredentials | undefined> {
+    const userTokenString = localStorage.getItem("userToken");
+    if (userTokenString) {
+      const userToken = JSON.parse(userTokenString);
+
+      const resp = await fetch(`${API_PATH}/refreshToken`, {
+        method: "POST",
+        body: `{"refreshToken": "${userToken.refreshToken}"}`,
+      });
+
+      if (resp.ok) {
+        const activeUser = this.getActiveUser();
+        if (!activeUser) throw new Error("Wny no active user");
+
+        const userToken = await resp.json() as { token: string; refreshToken: string };
+        return {
+          user: activeUser,
+          ...userToken,
+        };
+      }
+    }
+
+    const response = await fetch(`${API_PATH}/login`, {
+      method: "POST",
+      body: JSON.stringify(loginParams),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) return;
+
+    const credentials = await response.json() as UserCredentials;
+    return credentials;
+  }
+
+  public async registerUser(params: LoginParams): Promise<UserCrendials | undefined> {
+    const response = await fetch(`${API_PATH}/register`, {
+      method: "POST",
+      body: JSON.stringify(params),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) return;
+
+    const credentials = await response.json() as UserCredentials;
+    return credentials;
+  }
+
+  public logoutCurrentUser(): void {
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("activeUserId");
+  }
 }
+
+export type LoginParams = { name: string; surname: string; password: string };
 
 export type DataType = "project" | "user" | "feature" | "task";
 
@@ -286,7 +389,6 @@ type DatabaseEntry = DatabaseEntries[DatabaseKey];
 
 export type UserRole = "admin" | "devops" | "developer";
 
-
 const admin: User = {
   id: "sillyHippoAdmin",
   name: "Hipa",
@@ -317,21 +419,31 @@ export type User = {
   role: UserRole;
 };
 
-export type UserState = {
-  users: User[];
-  activeUser: User;
+export type UserCredentials = {
+  user: User;
+  refreshToken: string;
+  token: string;
 };
 
-export type UserActionType = "activeUserChanged" | "userAdded";
+export type UserState = {
+  users: User[];
+  activeUser?: User;
+};
+
+export type UserActionType = "activeUserChanged" | "userAdded" | "userLoggedOut";
 
 export type UserAction = {
   type: UserActionType;
   user: User;
+} | {
+  type: "userLoggedIn";
+  credentials: UserCredentials;
 };
 
 export function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
     case "activeUserChanged":
+      database.setActiveUser(action.user);
       return {
         ...state,
         activeUser: action.user,
@@ -340,6 +452,19 @@ export function userReducer(state: UserState, action: UserAction): UserState {
       return {
         ...state,
         users: [...state.users, action.user],
+      };
+    case "userLoggedOut":
+      database.logoutCurrentUser();
+      return {
+        ...state,
+        activeUser: undefined,
+      };
+    case "userLoggedIn":
+      database.setActiveUser(action.credentials.user);
+      database.setUserToken(action.credentials.token, action.credentials.refreshToken);
+      return {
+        ...state,
+        activeUser: action.credentials.user,
       };
   }
 }
@@ -359,7 +484,7 @@ export function getInitialProjectState(): ProjectState {
 export function getInitialUserState(): UserState {
   return {
     users: database.getAll("user"),
-    activeUser: admin,
+    activeUser: database.getActiveUser(),
   };
 }
 

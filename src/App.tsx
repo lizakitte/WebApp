@@ -1,11 +1,11 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 import DisplayProjects from "./components/Project/DisplayProjects.tsx";
 import PCreationForm from "./components/Project/PCreationForm.tsx";
 import PUpdateForm from "./components/Project/PUpdateForm.tsx";
 import FCreationForm from "./components/Feature/FCreationForm.tsx";
 import UserContext from "./lib/UserContext.ts";
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import {
   featureReducer,
   getInitialFeaturesState,
@@ -15,6 +15,7 @@ import {
   projectReducer,
   taskReducer,
   userReducer,
+  database,
 } from "./lib/data.ts";
 import Header from "./components/Header.tsx";
 import ProjectContext from "./lib/ProjectContext.ts";
@@ -35,6 +36,7 @@ import {
   updateProjectPathId,
   updateTaskDisabledPathId,
   updateTaskPathId,
+  loginPagePath,
 } from "./lib/pathsNames.ts";
 import FeatureContext from "./lib/FeatureContext.ts";
 import TaskContext from "./lib/TaskContext.ts";
@@ -44,6 +46,7 @@ import TaskUpdateForm from "./components/Task/TaskUpdateForm.tsx";
 import TaskDeleteForm from "./components/Task/TaskDeleteForm.tsx";
 import TaskDetails from "./components/Task/TaskDetails.tsx";
 import TaskUpdateDisabled from "./components/Task/TaskUpdateDisabled.tsx";
+import LoginForm from "./components/LoginForm.tsx";
 
 function App() {
   const [userState, userDispatch] = useReducer(
@@ -63,6 +66,16 @@ function App() {
     getInitialTaskState()
   );
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userState.activeUser) {
+      navigate(loginPagePath);
+    } else {
+      database.refreshUserTokenIfNeeded();
+    }
+  }, [userState.activeUser]);
+
   return (
     <UserContext.Provider value={{ state: userState, dispatch: userDispatch }}>
       <ProjectContext.Provider
@@ -75,49 +88,48 @@ function App() {
             value={{ state: taskState, dispatch: taskDispatch }}
           >
             <Header />
-            <BrowserRouter>
-              <Routes>
-                <Route path={homePagePath} element={<DisplayProjects />} />
-                <Route path={createProjectPath} element={<PCreationForm />} />
-                <Route
-                  path={`${updateProjectPathId}/:id`}
-                  element={<PUpdateForm />}
-                />
+            <Routes>
+              <Route path={loginPagePath} element={<LoginForm />} />
+              <Route path={homePagePath} element={<DisplayProjects />} />
+              <Route path={createProjectPath} element={<PCreationForm />} />
+              <Route
+                path={`${updateProjectPathId}/:id`}
+                element={<PUpdateForm />}
+              />
 
-                <Route
-                  path={projectFeaturesPath}
-                  element={<DisplayFeatures />}
-                />
-                <Route path={createFeaturePath} element={<FCreationForm />} />
-                <Route
-                  path={`${updateFeaturePathId}/:featureId`}
-                  element={<FUpdateForm />}
-                />
-                <Route
-                  path={`${featureDetailsPathId}/:featureId`}
-                  element={<FeatureDetails />}
-                />
+              <Route
+                path={projectFeaturesPath}
+                element={<DisplayFeatures />}
+              />
+              <Route path={createFeaturePath} element={<FCreationForm />} />
+              <Route
+                path={`${updateFeaturePathId}/:featureId`}
+                element={<FUpdateForm />}
+              />
+              <Route
+                path={`${featureDetailsPathId}/:featureId`}
+                element={<FeatureDetails />}
+              />
 
-                <Route path={featureTasksPath} element={<DisplayTasks />} />
-                <Route path={createTaskPath} element={<TaskCreationForm />} />
-                <Route
-                  path={`${updateTaskPathId}/:taskId`}
-                  element={<TaskUpdateForm />}
-                />
-                <Route
-                  path={`${updateTaskDisabledPathId}/:taskId`}
-                  element={<TaskUpdateDisabled />}
-                />
-                <Route
-                  path={`${taskDeletePathId}/:taskId`}
-                  element={<TaskDeleteForm />}
-                />
-                <Route
-                  path={`${taskDetailsPathId}/:taskId`}
-                  element={<TaskDetails />}
-                />
-              </Routes>
-            </BrowserRouter>
+              <Route path={featureTasksPath} element={<DisplayTasks />} />
+              <Route path={createTaskPath} element={<TaskCreationForm />} />
+              <Route
+                path={`${updateTaskPathId}/:taskId`}
+                element={<TaskUpdateForm />}
+              />
+              <Route
+                path={`${updateTaskDisabledPathId}/:taskId`}
+                element={<TaskUpdateDisabled />}
+              />
+              <Route
+                path={`${taskDeletePathId}/:taskId`}
+                element={<TaskDeleteForm />}
+              />
+              <Route
+                path={`${taskDetailsPathId}/:taskId`}
+                element={<TaskDetails />}
+              />
+            </Routes>
           </TaskContext.Provider>
         </FeatureContext.Provider>
       </ProjectContext.Provider>

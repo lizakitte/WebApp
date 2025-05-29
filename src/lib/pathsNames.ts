@@ -13,3 +13,5 @@ export const updateTaskPathId = "/updateTask";
 export const updateTaskDisabledPathId = "/viewTask";
 export const taskDetailsPathId = "/taskDetails";
 export const taskDeletePathId = "/deleteTask";
+
+export const loginPagePath = "/login";
