@@ -55,7 +55,7 @@ function PUpdateForm() {
 
   return (
     <>
-      <a onClick={() => navigate(homePagePath)}>&larr; Back to all 🦛🦛</a>
+      <a onClick={() => navigate(homePagePath)}>&larr; Back to all</a>
       <form onSubmit={onSubmit}>
         <h1>
           Update the {project.name} &#40;{project.description}&#41;?

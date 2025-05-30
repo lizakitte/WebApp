@@ -47,10 +47,10 @@ function PCreationForm() {
 
     return ( 
         <>
-            <a onClick={() => navigate(homePagePath)}>&larr; Back to all projects 🦛🦛</a>
+            <a onClick={() => navigate(homePagePath)}>&larr; Back to all projects</a>
             <form onSubmit={onSubmit}>
-                <h1>Create New Project 🦛</h1>
-                <label htmlFor={nameInputName}>Name 🎀🦛</label>
+                <h1>Create New Project</h1>
+                <label htmlFor={nameInputName}>Name</label>
                 <input type="text" id={nameInputName} name={nameInputName} placeholder="Enter name..."></input>
                 <label htmlFor={descrInputName}>Description</label>
                 <textarea id={descrInputName} name={descrInputName} placeholder="Enter description..."></textarea>

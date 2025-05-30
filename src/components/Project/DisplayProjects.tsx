@@ -17,7 +17,7 @@ function DisplayProjects() {
       <button className="formSubmitButton" onClick={() => navigate(createProjectPath)}>
         Add new
       </button>
-      <h1>Here is your data: 🦛</h1>
+      <h1>Here is your data: </h1>
       <table>
         <thead>
           <tr>

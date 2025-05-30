@@ -47,7 +47,7 @@ function FCreationForm() {
     const priority = priorityInput.value;
 
     if(priority !== "low" && priority !== "medium" && priority !== "high") {
-        throw new Error("Unknown priority!🦛");
+        throw new Error("Unknown priority!");
     }
 
     if(projectState.activeProject === undefined) {
@@ -71,10 +71,10 @@ function FCreationForm() {
 
   return (
     <>
-      <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to all features 🦛🦛</a>
+      <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to all features</a>
       <form onSubmit={onSubmit}>
-        <h1>Create New Feature🦛</h1>
-        <label htmlFor={nameInputName}>Name 🎀🦛</label>
+        <h1>Create New Feature</h1>
+        <label htmlFor={nameInputName}>Name</label>
         <input
           type="text"
           id={nameInputName}

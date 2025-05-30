@@ -22,7 +22,7 @@ function DisplayFeatures() {
 
   return (
     <div>
-      <a onClick={() => navigate(homePagePath)}>&larr; Back to projects 🦛🦛</a>
+      <a onClick={() => navigate(homePagePath)}>&larr; Back to projects </a>
       <div>
         <button
           className="formSubmitButton"
@@ -30,7 +30,7 @@ function DisplayFeatures() {
         >
           Add new
         </button>
-        <h1>Here are the features for the project: 🦛</h1>
+        <h1>Here are the features for the project: </h1>
 
         <table>
           <thead>

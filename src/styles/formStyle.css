@@ -2,7 +2,7 @@ label {
     text-align: left;
 }
 
-input[type=text], select {
+input[type=text], input[type=name], input[type=surname], input[type=password], select {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     width: 100%;
     padding: 12px 20px;
@@ -27,7 +27,6 @@ textarea {
   }
 
 input[type=submit] {
-    
     border: none;
     border-radius: 4px;
     color: white;

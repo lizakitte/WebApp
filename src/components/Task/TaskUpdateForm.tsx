@@ -81,11 +81,11 @@ export default function TaskUpdateForm() { // want to do another view with butto
     const state = stateInput.value;
 
     if (priority !== "low" && priority !== "medium" && priority !== "high") {
-      throw new Error("Unknown priority!🦛");
+      throw new Error("Unknown priority!");
     }
 
      if (state !== "todo" && state !== "doing" && state !== "done") {
-      throw new Error("Unknown feature state!🦛");
+      throw new Error("Unknown feature state!");
     }
 
     if (ownerId === "Not chosen") {
@@ -115,11 +115,11 @@ export default function TaskUpdateForm() { // want to do another view with butto
   return (
     <div>
       <a onClick={() => navigate(featureTasksPath)}>
-        &larr; Back to all tasks 🦛🦛
+        &larr; Back to all tasks
       </a>
       <form onSubmit={onSubmit}>
-        <h1>Update Task🦛</h1>
-        <label htmlFor={nameInputName}>Name 🎀🦛</label>
+        <h1>Update Task</h1>
+        <label htmlFor={nameInputName}>Name</label>
         <input
           type="text"
           id={nameInputName}

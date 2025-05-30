@@ -19,7 +19,7 @@ export default function DisplayTasks() {
 
   return (
     <div>
-      <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to features 🦛🦛</a>
+      <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to features</a>
       <div>
         <button
           className="formSubmitButton"
@@ -27,7 +27,7 @@ export default function DisplayTasks() {
         >
           Add new
         </button>
-        <h1>Here are the tasks for the feature: 🦛</h1>
+        <h1>Here are the tasks for the feature:</h1>
 
         <table>
           <thead>

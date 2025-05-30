@@ -59,11 +59,11 @@ function FUpdateForm() {
     const state = stateInput.value;
 
     if (priority !== "low" && priority !== "medium" && priority !== "high") {
-      throw new Error("Unknown priority!🦛");
+      throw new Error("Unknown priority!");
     }
 
     if (state !== "todo" && state !== "doing" && state !== "done") {
-      throw new Error("Unknown feature state!🦛");
+      throw new Error("Unknown feature state!");
     }
 
     dispatch({
@@ -79,7 +79,7 @@ function FUpdateForm() {
   return (
     <div>
       <a onClick={() => navigate(projectFeaturesPath)}>
-        &larr; Back to all 🦛🦛
+        &larr; Back to all
       </a>
       <form onSubmit={onSubmit}>
         <h1>

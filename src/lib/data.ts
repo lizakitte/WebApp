@@ -164,7 +164,7 @@ export class LocalStorageDatabase {
           projectId: features[i].projectId,
           startDate: features[i].startDate,
           state,
-          ownerId: "sillyHippoAdmin",
+          ownerId: admin.id,
         };
         localStorage.setItem("feature", JSON.stringify(features));
         return true;
@@ -182,7 +182,7 @@ export class LocalStorageDatabase {
     state: FeatureState,
     startDate: string,
     endDate: string,
-    ownerId: string | undefined,
+    ownerId: string | undefined
   ): boolean {
     const tasks = this.getAll<Task>("task");
     for (let i = 0; i < tasks.length; i++) {
@@ -244,7 +244,10 @@ export class LocalStorageDatabase {
   }
 
   public setUserToken(token: string, refreshToken: string): void {
-    localStorage.setItem("userToken", `{"token": "${token}", "refreshToken": "${refreshToken}"}`);
+    localStorage.setItem(
+      "userToken",
+      `{"token": "${token}", "refreshToken": "${refreshToken}"}`
+    );
   }
 
   public getActiveUser(): User | undefined {
@@ -285,7 +288,9 @@ export class LocalStorageDatabase {
     return true;
   }
 
-  public async loginUser(loginParams: LoginParams): Promise<UserCredentials | undefined> {
+  public async loginUser(
+    loginParams: LoginParams
+  ): Promise<UserCredentials | undefined> {
     const userTokenString = localStorage.getItem("userToken");
     if (userTokenString) {
       const userToken = JSON.parse(userTokenString);
@@ -299,7 +304,10 @@ export class LocalStorageDatabase {
         const activeUser = this.getActiveUser();
         if (!activeUser) throw new Error("Wny no active user");
 
-        const userToken = await resp.json() as { token: string; refreshToken: string };
+        const userToken = (await resp.json()) as {
+          token: string;
+          refreshToken: string;
+        };
         return {
           user: activeUser,
           ...userToken,
@@ -316,11 +324,13 @@ export class LocalStorageDatabase {
     });
     if (!response.ok) return;
 
-    const credentials = await response.json() as UserCredentials;
+    const credentials = (await response.json()) as UserCredentials;
     return credentials;
   }
 
-  public async registerUser(params: LoginParams): Promise<UserCrendials | undefined> {
+  public async registerUser(
+    params: LoginParams
+  ): Promise<UserCredentials | undefined> {
     const response = await fetch(`${API_PATH}/register`, {
       method: "POST",
       body: JSON.stringify(params),
@@ -330,7 +340,7 @@ export class LocalStorageDatabase {
     });
     if (!response.ok) return;
 
-    const credentials = await response.json() as UserCredentials;
+    const credentials = (await response.json()) as UserCredentials;
     const users = this.getAll<User>("user");
     users.push(credentials.user);
     localStorage.setItem("user", JSON.stringify(users));
@@ -343,7 +353,12 @@ export class LocalStorageDatabase {
   }
 }
 
-export type LoginParams = { name: string; surname: string; password: string };
+export type LoginParams = {
+  name: string;
+  surname: string;
+  password: string;
+  googleId?: string;
+};
 
 export type DataType = "project" | "user" | "feature" | "task";
 
@@ -391,26 +406,26 @@ type DatabaseEntries = {
 type DatabaseKey = keyof DatabaseEntries;
 type DatabaseEntry = DatabaseEntries[DatabaseKey];
 
-export type UserRole = "admin" | "devops" | "developer";
+export type UserRole = "admin" | "devops" | "developer" | "guest";
 
 const admin: User = {
-  id: "sillyHippoAdmin",
-  name: "Hipa",
-  surname: "Dripa",
+  id: "admin",
+  name: "admin",
+  surname: "admin",
   role: "admin",
 };
 
 const developer: User = {
-  id: "sillyHippoDeveloper",
-  name: "Hipo",
-  surname: "Dripo",
+  id: "developer",
+  name: "developer",
+  surname: "developer",
   role: "developer",
 };
 
 const devops: User = {
-  id: "sillyHippoDevops",
-  name: "Larry",
-  surname: "Devops",
+  id: "devops",
+  name: "devops",
+  surname: "devops",
   role: "devops",
 };
 
@@ -421,6 +436,7 @@ export type User = {
   name: string;
   surname: string;
   role: UserRole;
+  googleId?: string;
 };
 
 export type UserCredentials = {
@@ -434,15 +450,20 @@ export type UserState = {
   activeUser?: User;
 };
 
-export type UserActionType = "activeUserChanged" | "userAdded" | "userLoggedOut";
+export type UserActionType =
+  | "activeUserChanged"
+  | "userAdded"
+  | "userLoggedOut";
 
-export type UserAction = {
-  type: UserActionType;
-  user: User;
-} | {
-  type: "userLoggedIn";
-  credentials: UserCredentials;
-};
+export type UserAction =
+  | {
+      type: UserActionType;
+      user: User;
+    }
+  | {
+      type: "userLoggedIn";
+      credentials: UserCredentials;
+    };
 
 export function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
@@ -465,7 +486,10 @@ export function userReducer(state: UserState, action: UserAction): UserState {
       };
     case "userLoggedIn":
       database.setActiveUser(action.credentials.user);
-      database.setUserToken(action.credentials.token, action.credentials.refreshToken);
+      database.setUserToken(
+        action.credentials.token,
+        action.credentials.refreshToken
+      );
       return {
         ...state,
         activeUser: action.credentials.user,

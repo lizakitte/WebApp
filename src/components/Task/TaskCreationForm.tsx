@@ -55,7 +55,7 @@ export default function TaskCreationForm() {
     const estTime = timeInput.value;
 
     if (priority !== "low" && priority !== "medium" && priority !== "high") {
-      throw new Error("Unknown priority!🦛");
+      throw new Error("Unknown priority!");
     }
 
     if (featureState.activeFeature === null) {
@@ -83,11 +83,11 @@ export default function TaskCreationForm() {
   return (
     <div>
       <a onClick={() => navigate(featureTasksPath)}>
-        &larr; Back to all tasks 🦛🦛
+        &larr; Back to all tasks
       </a>
       <form onSubmit={onSubmit}>
-        <h1>Create New Task🦛</h1>
-        <label htmlFor={nameInputName}>Name 🎀🦛</label>
+        <h1>Create New Task</h1>
+        <label htmlFor={nameInputName}>Name</label>
         <input
           type="text"
           id={nameInputName}

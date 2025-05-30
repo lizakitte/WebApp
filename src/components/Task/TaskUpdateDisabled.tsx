@@ -21,7 +21,7 @@ export default function TaskUpdateForm() {
   return (
     <div>
       <a onClick={() => navigate(featureTasksPath)}>
-        &larr; Back to all tasks 🦛🦛
+        &larr; Back to all tasks
       </a>
       <button
         className="formUpdateButton"
@@ -30,8 +30,8 @@ export default function TaskUpdateForm() {
         Update
       </button>
       <form>
-        <h1>Task details🦛</h1>
-        <label htmlFor={nameInputName}>Name 🎀🦛</label>
+        <h1>Task details</h1>
+        <label htmlFor={nameInputName}>Name</label>
         <input
           disabled
           type="text"

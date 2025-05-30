@@ -44,8 +44,7 @@ function FeatureDetails({ featureId }: { featureId?: string }) {
       {deleteFeatureId && (
         <FDeleteForm featureId={deleteFeatureId}></FDeleteForm>
       )}
-      {/* <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to all features 🦛🦛</a>
-            <h1>Feature details:</h1> */}
+
       <h3>{feature.name}</h3>
       <p>
         <span style={{ fontWeight: "bold" }}>Description:</span>{" "}

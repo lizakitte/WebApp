@@ -22,12 +22,17 @@ var users = [
 ];
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.get('/', function (req, res) {
-    res.send('Hello World - simple api with JWT!');
+app.get("/", function (req, res) {
+    res.send("Hello World - simple api with JWT!");
 });
 app.post("/login", function (req, res) {
-    var _a = req.body, name = _a.name, surname = _a.surname, password = _a.password;
-    var user = users.find(function (user) { return user.name === name && user.surname === surname && user.password === password; });
+    var _a = req.body, name = _a.name, surname = _a.surname, password = _a.password, googleId = _a.googleId;
+    var user = users.find(function (user) {
+        return user.name === name &&
+            user.surname === surname &&
+            user.password === password &&
+            (!user.googleId || user.googleId === googleId);
+    });
     if (!user) {
         res.status(400).send();
         return;
@@ -38,19 +43,22 @@ app.post("/login", function (req, res) {
     res.status(200).send({ user: user, token: token, refreshToken: refreshToken });
 });
 app.post("/register", function (req, res) {
-    var _a = req.body, name = _a.name, surname = _a.surname, password = _a.password;
-    var existingUser = users.find(function (user) { return user.name === name && user.surname === surname && user.password === password; });
+    var _a = req.body, name = _a.name, surname = _a.surname, password = _a.password, googleId = _a.googleId;
+    var existingUser = users.find(function (user) { return user.name === name && user.surname === surname; });
     if (existingUser) {
         res.status(400).send();
         return;
     }
+    var role = googleId ? "guest" : "developer";
     var newUser = {
         name: name,
         surname: surname,
         password: password,
+        role: role,
+        googleId: googleId,
         id: crypto.randomUUID(),
-        role: "developer",
     };
+    users.push(newUser);
     var expTime = 120;
     var token = generateToken(expTime);
     refreshToken = generateToken(60 * 60);
@@ -59,7 +67,7 @@ app.post("/register", function (req, res) {
 app.post("/refreshToken", function (req, res) {
     var refreshTokenFromPost = req.body.refreshToken;
     if (refreshToken !== refreshTokenFromPost) {
-        res.status(400).send('Bad refresh token!');
+        res.status(400).send("Bad refresh token!");
         return;
     }
     var expTime = 120;
@@ -79,12 +87,14 @@ app.listen(port, function () {
 });
 function generateToken(expirationInSeconds) {
     var exp = Math.floor(Date.now() / 1000) + expirationInSeconds;
-    var token = jsonwebtoken_1.default.sign({ exp: exp, foo: 'bar' }, tokenSecret, { algorithm: 'HS256' });
+    var token = jsonwebtoken_1.default.sign({ exp: exp, foo: "bar" }, tokenSecret, {
+        algorithm: "HS256",
+    });
     return token;
 }
 function verifyToken(req, res, next) {
-    var authHeader = req.headers['authorization'];
-    var token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.split(' ')[1];
+    var authHeader = req.headers["authorization"];
+    var token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.split(" ")[1];
     if (!token)
         return res.sendStatus(403);
     jsonwebtoken_1.default.verify(token, tokenSecret, function (err, user) {
