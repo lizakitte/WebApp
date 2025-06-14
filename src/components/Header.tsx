@@ -13,9 +13,9 @@ export default function Header() {
             {state.activeUser.surname}
           </p>
           <button
-            onClick={() =>
-              dispatch({ type: "userLoggedOut", user: state.activeUser! })
-            }
+            onClick={() => {
+              dispatch({ type: "userLoggedOut", user: state.activeUser! });
+            }}
           >
             Log out
           </button>

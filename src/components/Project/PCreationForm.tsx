@@ -1,12 +1,19 @@
 import { FormEvent, useContext } from "react";
 import "../../styles/formStyle.css"
 import { useNavigate } from "react-router";
-import { homePagePath } from "../../lib/pathsNames";
+import { homePagePath, loginPagePath } from "../../lib/pathsNames";
 import ProjectContext from "../../lib/ProjectContext";
+import UserContext from "../../lib/UserContext";
 
 function PCreationForm() {
     const navigate = useNavigate();
     const { dispatch } = useContext(ProjectContext);
+    const { state: userState } = useContext(UserContext);
+
+    if(userState.activeUser === undefined) {
+        navigate(loginPagePath);
+        return;
+    }
 
     const nameInputName = "projectName";
     const descrInputName = "projectDescription"
@@ -45,9 +52,11 @@ function PCreationForm() {
         navigate(homePagePath);
     }
 
-    return ( 
+    return (
         <>
-            <a onClick={() => navigate(homePagePath)}>&larr; Back to all projects</a>
+        <a onClick={() => navigate(homePagePath)}>&larr; Back to all projects</a>
+        {(userState.activeUser.role === "admin") ? (
+             <>
             <form onSubmit={onSubmit}>
                 <h1>Create New Project</h1>
                 <label htmlFor={nameInputName}>Name</label>
@@ -56,6 +65,8 @@ function PCreationForm() {
                 <textarea id={descrInputName} name={descrInputName} placeholder="Enter description..."></textarea>
                 <input type="submit" className="formSubmitButton" value="Submit"></input>
             </form>
+        </>
+        ) : (<h2>Can't reach</h2>)} 
         </>
      );
 }

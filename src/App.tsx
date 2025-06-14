@@ -30,7 +30,6 @@ import {
   featureTasksPath,
   homePagePath,
   projectFeaturesPath,
-  taskDeletePathId,
   taskDetailsPathId,
   updateFeaturePathId,
   updateProjectPathId,
@@ -43,10 +42,10 @@ import TaskContext from "./lib/TaskContext.ts";
 import DisplayTasks from "./components/Task/DisplayTasks.tsx";
 import TaskCreationForm from "./components/Task/TaskCreationForm.tsx";
 import TaskUpdateForm from "./components/Task/TaskUpdateForm.tsx";
-import TaskDeleteForm from "./components/Task/TaskDeleteForm.tsx";
 import TaskDetails from "./components/Task/TaskDetails.tsx";
 import TaskUpdateDisabled from "./components/Task/TaskUpdateDisabled.tsx";
 import LoginForm from "./components/LoginForm.tsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   const [userState, userDispatch] = useReducer(
@@ -77,63 +76,67 @@ function App() {
   }, [userState.activeUser]);
 
   return (
-    <UserContext.Provider value={{ state: userState, dispatch: userDispatch }}>
-      <ProjectContext.Provider
-        value={{ state: projectState, dispatch: projectDispatch }}
+    <GoogleOAuthProvider clientId="587637613591-ijs7fl2k881v6fisqk31vc7uj92ej9jq.apps.googleusercontent.com">
+      <UserContext.Provider
+        value={{ state: userState, dispatch: userDispatch }}
       >
-        <FeatureContext.Provider
-          value={{ state: featureState, dispatch: featureDispatch }}
+        <ProjectContext.Provider
+          value={{ state: projectState, dispatch: projectDispatch }}
         >
-          <TaskContext.Provider
-            value={{ state: taskState, dispatch: taskDispatch }}
+          <FeatureContext.Provider
+            value={{ state: featureState, dispatch: featureDispatch }}
           >
-            <Header />
-            <Routes>
-              <Route path={loginPagePath} element={<LoginForm />} />
-              <Route path={homePagePath} element={<DisplayProjects />} />
-              <Route path={createProjectPath} element={<PCreationForm />} />
-              <Route
-                path={`${updateProjectPathId}/:id`}
-                element={<PUpdateForm />}
-              />
+            <TaskContext.Provider
+              value={{ state: taskState, dispatch: taskDispatch }}
+            >
+              <Header />
+              <Routes>
+                <Route path={loginPagePath} element={<LoginForm />} />
+                <Route path={homePagePath} element={<DisplayProjects />} />
+                <Route path={createProjectPath} element={<PCreationForm />} />
+                <Route
+                  path={`${updateProjectPathId}/:id`}
+                  element={<PUpdateForm />}
+                />
 
-              <Route
-                path={projectFeaturesPath}
-                element={<DisplayFeatures />}
-              />
-              <Route path={createFeaturePath} element={<FCreationForm />} />
-              <Route
-                path={`${updateFeaturePathId}/:featureId`}
-                element={<FUpdateForm />}
-              />
-              <Route
-                path={`${featureDetailsPathId}/:featureId`}
-                element={<FeatureDetails />}
-              />
+                <Route
+                  path={projectFeaturesPath}
+                  element={<DisplayFeatures />}
+                />
+                <Route path={createFeaturePath} element={<FCreationForm />} />
+                <Route
+                  path={`${updateFeaturePathId}/:featureId`}
+                  element={<FUpdateForm />}
+                />
+                <Route
+                  path={`${featureDetailsPathId}/:featureId`}
+                  element={<FeatureDetails />}
+                />
 
-              <Route path={featureTasksPath} element={<DisplayTasks />} />
-              <Route path={createTaskPath} element={<TaskCreationForm />} />
-              <Route
-                path={`${updateTaskPathId}/:taskId`}
-                element={<TaskUpdateForm />}
-              />
-              <Route
-                path={`${updateTaskDisabledPathId}/:taskId`}
-                element={<TaskUpdateDisabled />}
-              />
-              <Route
+                <Route path={featureTasksPath} element={<DisplayTasks />} />
+                <Route path={createTaskPath} element={<TaskCreationForm />} />
+                <Route
+                  path={`${updateTaskPathId}/:taskId`}
+                  element={<TaskUpdateForm />}
+                />
+                <Route
+                  path={`${updateTaskDisabledPathId}/:taskId`}
+                  element={<TaskUpdateDisabled />}
+                />
+                {/* <Route
                 path={`${taskDeletePathId}/:taskId`}
                 element={<TaskDeleteForm />}
-              />
-              <Route
-                path={`${taskDetailsPathId}/:taskId`}
-                element={<TaskDetails />}
-              />
-            </Routes>
-          </TaskContext.Provider>
-        </FeatureContext.Provider>
-      </ProjectContext.Provider>
-    </UserContext.Provider>
+              /> */}
+                <Route
+                  path={`${taskDetailsPathId}/:taskId`}
+                  element={<TaskDetails />}
+                />
+              </Routes>
+            </TaskContext.Provider>
+          </FeatureContext.Provider>
+        </ProjectContext.Provider>
+      </UserContext.Provider>
+    </GoogleOAuthProvider>
   );
 }
 

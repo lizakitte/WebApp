@@ -3,12 +3,14 @@ import "../../styles/formStyle.css";
 import { database, Project } from "../../lib/data";
 import React, { FormEvent, useContext, useState } from "react";
 import Modal from "../Modal";
-import { homePagePath } from "../../lib/pathsNames";
+import { homePagePath, loginPagePath } from "../../lib/pathsNames";
 import ProjectContext from "../../lib/ProjectContext";
+import UserContext from "../../lib/UserContext";
 
 function PUpdateForm() {
   const navigate = useNavigate();
   const { dispatch } = useContext(ProjectContext);
+  const { state: userState } = useContext(UserContext);
 
   const params = useParams();
   const project = database.getById<Project>("project", params.id!)!;
@@ -16,6 +18,11 @@ function PUpdateForm() {
   const descrInputName = "projectDescription";
 
   const [styleSuccess, setStyleSuccess] = useState<React.CSSProperties>({});
+
+  if (userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -49,39 +56,47 @@ function PUpdateForm() {
       id: project.id,
       name: pname,
       description: descr,
-    })
+    });
     setStyleSuccess({ display: "block" });
   }
 
   return (
     <>
       <a onClick={() => navigate(homePagePath)}>&larr; Back to all</a>
-      <form onSubmit={onSubmit}>
-        <h1>
-          Update the {project.name} &#40;{project.description}&#41;?
-        </h1>
-        <label htmlFor={nameInputName}>Name</label>
-        <input
-          type="text"
-          id={nameInputName}
-          name={nameInputName}
-          defaultValue={project.name}
-        ></input>
-        <label htmlFor={descrInputName}>Description</label>
-        <textarea
-          id={descrInputName}
-          name={descrInputName}
-          defaultValue={project.description}
-        ></textarea>
-        <input
-          type="submit"
-          className="formUpdateButton"
-          value="Submit"
-        ></input>
-      </form>
-      <Modal style={styleSuccess} setStyle={setStyleSuccess} onClose={() => navigate(homePagePath)}>
-        <p>Update was successfull!</p>
-      </Modal>
+      {(userState.activeUser.role === "admin") ? (
+        <>
+        <form onSubmit={onSubmit}>
+          <h1>
+            Update the {project.name} &#40;{project.description}&#41;?
+          </h1>
+          <label htmlFor={nameInputName}>Name</label>
+          <input
+            type="text"
+            id={nameInputName}
+            name={nameInputName}
+            defaultValue={project.name}
+          ></input>
+          <label htmlFor={descrInputName}>Description</label>
+          <textarea
+            id={descrInputName}
+            name={descrInputName}
+            defaultValue={project.description}
+          ></textarea>
+          <input
+            type="submit"
+            className="formUpdateButton"
+            value="Submit"
+          ></input>
+        </form>
+        <Modal
+          style={styleSuccess}
+          setStyle={setStyleSuccess}
+          onClose={() => navigate(homePagePath)}
+        >
+          <p>Update was successfull!</p>
+        </Modal>
+        </>
+      ) : (<h2>Can't reach</h2>)}
     </>
   );
 }

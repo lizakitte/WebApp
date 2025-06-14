@@ -1,15 +1,18 @@
-import { FormEvent, useState, useContext, useEffect } from "react";
+import { FormEvent, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { homePagePath } from "../lib/pathsNames";
 import { database, UserCredentials, LoginParams } from "../lib/data";
 import Modal from "./Modal.tsx";
 import UserContext from "../lib/UserContext";
 import "../styles/formStyle.css";
+import React from "react";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 type GoogleCredentials = {
   given_name: string;
   family_name: string;
   sub: string;
+  email: string;
 };
 
 function parseJwt(token: string) {
@@ -31,51 +34,48 @@ export default function LoginForm() {
   const [modalStyle, setModalStyle] = useState<React.CSSProperties>({});
   const { state, dispatch } = useContext(UserContext);
 
-  useEffect(() => {
-    // @ts-expect-error window
-    window.signInWithGoogle = async function (data: any) {
-      const googleCreds = parseJwt(data.credential) as GoogleCredentials;
+  async function signInWithGoogle(data: CredentialResponse) {
+    const googleCreds = parseJwt(data.credential!) as GoogleCredentials;
 
-      for (const user of state.users) {
-        if (
-          user.name === googleCreds.given_name &&
-          user.surname === googleCreds.family_name &&
-          user.googleId === googleCreds.sub
-        ) {
-          const credentials = await database.loginUser({
-            name: user.name,
-            surname: user.surname,
-            password: "",
-            googleId: googleCreds.sub,
-          });
+    for (const user of state.users) {
+      if (
+        user.name === googleCreds.given_name &&
+        user.surname === googleCreds.family_name &&
+        user.googleId === googleCreds.sub
+      ) {
+        const credentials = await database.loginUser({
+          name: user.name,
+          surname: user.surname,
+          password: "",
+          googleId: googleCreds.sub,
+        });
 
-          if (!credentials)
-            throw new Error("Unreachable: credentials undefined");
-          dispatch({
-            type: "userLoggedIn",
-            credentials,
-          });
+        if (!credentials) throw new Error("Unreachable: credentials undefined");
+        dispatch({
+          type: "userLoggedIn",
+          credentials,
+        });
 
-          return navigate(homePagePath);
-        }
+        return navigate(homePagePath);
       }
+    }
 
-      const credentials = await database.registerUser({
-        name: googleCreds.given_name,
-        surname: googleCreds.family_name,
-        password: "",
-        googleId: googleCreds.sub,
-      });
+    const credentials = await database.registerUser({
+      name: googleCreds.given_name,
+      surname: googleCreds.family_name,
+      password: "",
+      googleId: googleCreds.sub,
+      email: googleCreds.email,
+    });
 
-      if (!credentials) throw new Error("Unreachable: credentials undefined");
-      dispatch({
-        type: "userLoggedIn",
-        credentials,
-      });
-      
-      navigate(homePagePath);
-    };
-  }, []);
+    if (!credentials) throw new Error("Unreachable: credentials undefined");
+    dispatch({
+      type: "userLoggedIn",
+      credentials,
+    });
+
+    navigate(homePagePath);
+  }
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -138,7 +138,6 @@ export default function LoginForm() {
 
   return (
     <>
-      <script src="https://accounts.google.com/gsi/client" async defer></script>
       <h2>Login</h2>
       <form onSubmit={onSubmit}>
         {["name", "surname", "password"].map((input) => {
@@ -152,26 +151,11 @@ export default function LoginForm() {
         })}
         <input className="formSubmitButton" type="submit" value="Login" />
         <input className="formSubmitButton" type="submit" value="Register" />
-        
-        <div
-          id="g_id_onload"
-          data-client_id="587637613591-ijs7fl2k881v6fisqk31vc7uj92ej9jq.apps.googleusercontent.com"
-          data-context="signin"
-          data-ux_mode="popup"
-          data-callback="signInWithGoogle"
-          data-auto_select="true"
-          data-itp_support="true"
-        ></div>
 
-        <div
-          className="g_id_signin"
-          data-type="standard"
-          data-shape="pill"
-          data-theme="outline"
-          data-text="signin_with"
-          data-size="large"
-          data-logo_alignment="left"
-        ></div>
+        <GoogleLogin
+          onSuccess={signInWithGoogle}
+          onError={() => console.error("Google login failed")}
+        ></GoogleLogin>
       </form>
       <Modal style={modalStyle} setStyle={setModalStyle}>
         ERROR: wrong credentials

@@ -1,17 +1,28 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { database, Feature } from "../../lib/data";
-import { featureTasksPath, updateFeaturePathId } from "../../lib/pathsNames";
+import {
+  featureTasksPath,
+  loginPagePath,
+  updateFeaturePathId,
+} from "../../lib/pathsNames";
 import { useContext, useState } from "react";
 import FDeleteForm from "./FDeleteForm";
 import FeatureContext from "../../lib/FeatureContext";
+import UserContext from "../../lib/UserContext";
 
 function FeatureDetails({ featureId }: { featureId?: string }) {
   const params = useParams();
   const navigate = useNavigate();
 
   const { dispatch } = useContext(FeatureContext);
+  const { state: userState } = useContext(UserContext);
 
   const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
+
+  if (userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   if (featureId === undefined) {
     featureId = params.featureId;
@@ -61,18 +72,26 @@ function FeatureDetails({ featureId }: { featureId?: string }) {
         <span style={{ fontWeight: "bold" }}>Start date:</span>{" "}
         {feature.startDate}
       </p>
-      <button
-        className="formUpdateButton"
-        onClick={() => navigate(`${updateFeaturePathId}/${feature.id}`)}
-      >
-        Update
-      </button>
-      <button
-        className="formDeleteButton"
-        onClick={() => setDeleteFeatureId(feature.id)}
-      >
-        Delete
-      </button>
+      {userState.activeUser.role === "admin" ? (
+        <button
+          className="formUpdateButton"
+          onClick={() => navigate(`${updateFeaturePathId}/${feature.id}`)}
+        >
+          Update
+        </button>
+      ) : (
+        <></>
+      )}
+      {userState.activeUser.role === "admin" ? (
+        <button
+          className="formDeleteButton"
+          onClick={() => setDeleteFeatureId(feature.id)}
+        >
+          Delete
+        </button>
+      ) : (
+        <></>
+      )}
       <button
         className="formSubmitButton"
         onClick={() => {

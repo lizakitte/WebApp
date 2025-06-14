@@ -1,18 +1,25 @@
 import { useNavigate } from "react-router";
-import { featureTasksPath } from "../../lib/pathsNames";
+import { featureTasksPath, loginPagePath } from "../../lib/pathsNames";
 import { FormEvent, useContext } from "react";
 import TaskContext from "../../lib/TaskContext";
 import FeatureContext from "../../lib/FeatureContext";
+import UserContext from "../../lib/UserContext";
 
 export default function TaskCreationForm() {
   const navigate = useNavigate();
   const { dispatch: taskDispatch } = useContext(TaskContext);
   const { state: featureState } = useContext(FeatureContext);
+  const { state: userState } = useContext(UserContext);
 
   const nameInputName = "taskName";
   const descrInputName = "taskDescription";
   const priorityInputName = "taskPriority";
   const timeInputName = "taskEstimatedTime";
+
+  if (userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -82,43 +89,47 @@ export default function TaskCreationForm() {
 
   return (
     <div>
-      <a onClick={() => navigate(featureTasksPath)}>
-        &larr; Back to all tasks
-      </a>
-      <form onSubmit={onSubmit}>
-        <h1>Create New Task</h1>
-        <label htmlFor={nameInputName}>Name</label>
-        <input
-          type="text"
-          id={nameInputName}
-          name={nameInputName}
-          placeholder="Enter name..."
-        ></input>
-        <label htmlFor={descrInputName}>Description</label>
-        <textarea
-          id={descrInputName}
-          name={descrInputName}
-          placeholder="Enter description..."
-        ></textarea>
-        <label htmlFor={priorityInputName}>Priority</label>
-        <select id={priorityInputName} name={priorityInputName}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <label htmlFor={timeInputName}>Estimated time</label>
-        <input
-          type="text"
-          id={timeInputName}
-          name={timeInputName}
-          placeholder="Enter estimated time..."
-        ></input>
-        <input
-          type="submit"
-          className="formSubmitButton"
-          value="Submit"
-        ></input>
-      </form>
+      <a onClick={() => navigate(featureTasksPath)}>&larr; Back to all tasks</a>
+      {userState.activeUser.role === "admin" ||
+      userState.activeUser.role === "developer" ||
+      userState.activeUser.role === "devops" ? (
+        <form onSubmit={onSubmit}>
+          <h1>Create New Task</h1>
+          <label htmlFor={nameInputName}>Name</label>
+          <input
+            type="text"
+            id={nameInputName}
+            name={nameInputName}
+            placeholder="Enter name..."
+          ></input>
+          <label htmlFor={descrInputName}>Description</label>
+          <textarea
+            id={descrInputName}
+            name={descrInputName}
+            placeholder="Enter description..."
+          ></textarea>
+          <label htmlFor={priorityInputName}>Priority</label>
+          <select id={priorityInputName} name={priorityInputName}>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <label htmlFor={timeInputName}>Estimated time</label>
+          <input
+            type="text"
+            id={timeInputName}
+            name={timeInputName}
+            placeholder="Enter estimated time..."
+          ></input>
+          <input
+            type="submit"
+            className="formSubmitButton"
+            value="Submit"
+          ></input>
+        </form>
+      ) : (
+        <h2>Can't reach</h2>
+      )}
     </div>
   );
 }

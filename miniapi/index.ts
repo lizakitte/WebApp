@@ -16,6 +16,7 @@ type User = {
   password: string;
   role: "admin" | "devops" | "developer" | "guest";
   googleId?: string;
+  email?: string;
 };
 
 const users: User[] = [
@@ -25,6 +26,20 @@ const users: User[] = [
     surname: "admin",
     role: "admin",
     password: "admin",
+  },
+  {
+    id: "developer",
+    name: "developer",
+    surname: "developer",
+    role: "developer",
+    password: "developer",
+  },
+  {
+    id: "devops",
+    name: "devops",
+    surname: "devops",
+    role: "devops",
+    password: "devops",
   },
 ];
 
@@ -57,7 +72,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { name, surname, password, googleId } = req.body;
+  const { name, surname, password, googleId, email } = req.body;
 
   const existingUser = users.find(
     (user) => user.name === name && user.surname === surname
@@ -75,6 +90,7 @@ app.post("/register", (req, res) => {
     password,
     role,
     googleId,
+    email,
     id: crypto.randomUUID(),
   };
 

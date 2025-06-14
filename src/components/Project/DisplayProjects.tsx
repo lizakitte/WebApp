@@ -3,21 +3,29 @@ import PDeleteForm from "./PDeleteForm";
 import { useContext, useState } from "react";
 import ProjectContext from "../../lib/ProjectContext";
 import "../../index.css";
-import { createProjectPath, projectFeaturesPath, updateProjectPathId } from "../../lib/pathsNames";
+import { createProjectPath, loginPagePath, projectFeaturesPath, updateProjectPathId } from "../../lib/pathsNames";
+import UserContext from "../../lib/UserContext";
 
 function DisplayProjects() {
   const navigate = useNavigate();
   const { state, dispatch } = useContext(ProjectContext);
+  const { state: userState } = useContext(UserContext);
 
   const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
+
+  if(userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   return (
     <div>
       {deleteProjectId && <PDeleteForm projectId={deleteProjectId} />}
-      <button className="formSubmitButton" onClick={() => navigate(createProjectPath)}>
+      {(userState.activeUser.role === "admin") ? (<button className="formSubmitButton" onClick={() => navigate(createProjectPath)}>
         Add new
-      </button>
-      <h1>Here is your data: </h1>
+      </button>) : (<></>)}
+      
+      <h1>Here are your projects: </h1>
       <table>
         <thead>
           <tr>
@@ -29,22 +37,25 @@ function DisplayProjects() {
         <tbody>
           {state.projects.map((project) => {
             return (
-              <tr>
+              <tr key={project.id}>
                 <td>{project.name}</td>
                 <td>{project.description}</td>
                 <td>
-                  <button
+
+                  {(userState.activeUser?.role === "admin") ? (<button
                     className="formUpdateButton"
                     onClick={() => navigate(`${updateProjectPathId}/${project.id}`)}
                   >
                     Update
-                  </button>
-                  <button
+                  </button>) : (<></>)}
+
+                  {(userState.activeUser?.role === "admin") ? (<button
                     className="formDeleteButton"
                     onClick={() => setDeleteProjectId(project.id)}
                   >
                     Delete
-                  </button>
+                  </button>) : (<></>)}
+                  
                   <button
                     className="formSubmitButton"
                     onClick={() => {

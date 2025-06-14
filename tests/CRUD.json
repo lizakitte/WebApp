@@ -1,0 +1,1325 @@
+{
+    "title": "Recording 14.06.2025 at 19:39:43",
+    "steps": [
+        {
+            "type": "setViewport",
+            "width": 688,
+            "height": 834,
+            "deviceScaleFactor": 1,
+            "isMobile": false,
+            "hasTouch": false,
+            "isLandscape": false
+        },
+        {
+            "type": "navigate",
+            "url": "http://localhost:5173/login",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:5173/login",
+                    "title": "Vite + React + TS"
+                }
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "#name"
+                ],
+                [
+                    "xpath///*[@id=\"name\"]"
+                ],
+                [
+                    "pierce/#name"
+                ]
+            ],
+            "offsetY": 13.287506103515625,
+            "offsetX": 100.63749694824219
+        },
+        {
+            "type": "change",
+            "value": "admin",
+            "selectors": [
+                [
+                    "#name"
+                ],
+                [
+                    "xpath///*[@id=\"name\"]"
+                ],
+                [
+                    "pierce/#name"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "#surname"
+                ],
+                [
+                    "xpath///*[@id=\"surname\"]"
+                ],
+                [
+                    "pierce/#surname"
+                ]
+            ],
+            "offsetY": 6.48748779296875,
+            "offsetX": 84.63749694824219
+        },
+        {
+            "type": "change",
+            "value": "admin",
+            "selectors": [
+                [
+                    "#surname"
+                ],
+                [
+                    "xpath///*[@id=\"surname\"]"
+                ],
+                [
+                    "pierce/#surname"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "#password"
+                ],
+                [
+                    "xpath///*[@id=\"password\"]"
+                ],
+                [
+                    "pierce/#password"
+                ]
+            ],
+            "offsetY": 25.6875,
+            "offsetX": 67.63749694824219
+        },
+        {
+            "type": "change",
+            "value": "admin",
+            "selectors": [
+                [
+                    "#password"
+                ],
+                [
+                    "xpath///*[@id=\"password\"]"
+                ],
+                [
+                    "pierce/#password"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Login[role=\"button\"]"
+                ],
+                [
+                    "form > input:nth-of-type(1)"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/form/input[1]"
+                ],
+                [
+                    "pierce/form > input:nth-of-type(1)"
+                ]
+            ],
+            "offsetY": 0.88751220703125,
+            "offsetX": 37.63749694824219
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Add new"
+                ],
+                [
+                    "div:nth-of-type(2) > button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) > button"
+                ],
+                [
+                    "text/Add new"
+                ]
+            ],
+            "offsetY": 19.462493896484375,
+            "offsetX": 69.2874984741211
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Name"
+                ],
+                [
+                    "#projectName"
+                ],
+                [
+                    "xpath///*[@id=\"projectName\"]"
+                ],
+                [
+                    "pierce/#projectName"
+                ]
+            ],
+            "offsetY": 36.54998779296875,
+            "offsetX": 80
+        },
+        {
+            "type": "change",
+            "value": "123",
+            "selectors": [
+                [
+                    "aria/Name"
+                ],
+                [
+                    "#projectName"
+                ],
+                [
+                    "xpath///*[@id=\"projectName\"]"
+                ],
+                [
+                    "pierce/#projectName"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "keyDown",
+            "target": "main",
+            "key": "Tab"
+        },
+        {
+            "type": "keyUp",
+            "key": "Tab",
+            "target": "main"
+        },
+        {
+            "type": "change",
+            "value": "123",
+            "selectors": [
+                [
+                    "aria/Description"
+                ],
+                [
+                    "#projectDescription"
+                ],
+                [
+                    "xpath///*[@id=\"projectDescription\"]"
+                ],
+                [
+                    "pierce/#projectDescription"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Submit"
+                ],
+                [
+                    "input[type='submit']"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/form/input[2]"
+                ],
+                [
+                    "pierce/input[type='submit']"
+                ],
+                [
+                    "text/Submit"
+                ]
+            ],
+            "offsetY": 20.14996337890625,
+            "offsetX": 60
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Select"
+                ],
+                [
+                    "table button.formSubmitButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/table/tbody/tr/td[3]/button[3]"
+                ],
+                [
+                    "pierce/table button.formSubmitButton"
+                ],
+                [
+                    "text/Select"
+                ]
+            ],
+            "offsetY": 22.75,
+            "offsetX": 26.17498779296875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Add new"
+                ],
+                [
+                    "div:nth-of-type(2) button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) button"
+                ],
+                [
+                    "text/Add new"
+                ]
+            ],
+            "offsetY": 11.212493896484375,
+            "offsetX": 72
+        },
+        {
+            "type": "change",
+            "value": "`",
+            "selectors": [
+                [
+                    "aria/Name"
+                ],
+                [
+                    "#featureName"
+                ],
+                [
+                    "xpath///*[@id=\"featureName\"]"
+                ],
+                [
+                    "pierce/#featureName"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "keyUp",
+            "key": "Escape",
+            "target": "main"
+        },
+        {
+            "type": "change",
+            "value": "123",
+            "selectors": [
+                [
+                    "aria/Name"
+                ],
+                [
+                    "#featureName"
+                ],
+                [
+                    "xpath///*[@id=\"featureName\"]"
+                ],
+                [
+                    "pierce/#featureName"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Priority"
+                ],
+                [
+                    "#featurePriority"
+                ],
+                [
+                    "xpath///*[@id=\"featurePriority\"]"
+                ],
+                [
+                    "pierce/#featurePriority"
+                ],
+                [
+                    "text/low"
+                ]
+            ],
+            "offsetY": 30.3499755859375,
+            "offsetX": 56
+        },
+        {
+            "type": "change",
+            "value": "high",
+            "selectors": [
+                [
+                    "aria/Priority"
+                ],
+                [
+                    "#featurePriority"
+                ],
+                [
+                    "xpath///*[@id=\"featurePriority\"]"
+                ],
+                [
+                    "pierce/#featurePriority"
+                ],
+                [
+                    "text/low"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Submit"
+                ],
+                [
+                    "input[type='submit']"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/form/input[2]"
+                ],
+                [
+                    "pierce/input[type='submit']"
+                ],
+                [
+                    "text/Submit"
+                ]
+            ],
+            "offsetY": 2.95001220703125,
+            "offsetX": 75
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Update"
+                ],
+                [
+                    "button.formUpdateButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[1]/div/button[1]"
+                ],
+                [
+                    "pierce/button.formUpdateButton"
+                ],
+                [
+                    "text/Update"
+                ]
+            ],
+            "offsetY": 20.83746337890625,
+            "offsetX": 55.287498474121094
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/State"
+                ],
+                [
+                    "#featureState"
+                ],
+                [
+                    "xpath///*[@id=\"featureState\"]"
+                ],
+                [
+                    "pierce/#featureState"
+                ],
+                [
+                    "text/todo"
+                ]
+            ],
+            "offsetY": 29.6875,
+            "offsetX": 74
+        },
+        {
+            "type": "change",
+            "value": "done",
+            "selectors": [
+                [
+                    "aria/State"
+                ],
+                [
+                    "#featureState"
+                ],
+                [
+                    "xpath///*[@id=\"featureState\"]"
+                ],
+                [
+                    "pierce/#featureState"
+                ],
+                [
+                    "text/todo"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Submit"
+                ],
+                [
+                    "input[type='submit']"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/form/input[3]"
+                ],
+                [
+                    "pierce/input[type='submit']"
+                ],
+                [
+                    "text/Submit"
+                ]
+            ],
+            "offsetY": 26.2874755859375,
+            "offsetX": 34
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/×"
+                ],
+                [
+                    "div:nth-of-type(2) button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/div/div/div/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) button"
+                ],
+                [
+                    "text/×"
+                ]
+            ],
+            "offsetY": 19.762481689453125,
+            "offsetX": 35.574981689453125
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Update"
+                ],
+                [
+                    "button.formUpdateButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[3]/div/button[1]"
+                ],
+                [
+                    "pierce/button.formUpdateButton"
+                ],
+                [
+                    "text/Update"
+                ]
+            ],
+            "offsetY": 21.83746337890625,
+            "offsetX": 34
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/State"
+                ],
+                [
+                    "#featureState"
+                ],
+                [
+                    "xpath///*[@id=\"featureState\"]"
+                ],
+                [
+                    "pierce/#featureState"
+                ],
+                [
+                    "text/done"
+                ]
+            ],
+            "offsetY": 43.08746337890625,
+            "offsetX": 199
+        },
+        {
+            "type": "change",
+            "value": "doing",
+            "selectors": [
+                [
+                    "aria/State"
+                ],
+                [
+                    "#featureState"
+                ],
+                [
+                    "xpath///*[@id=\"featureState\"]"
+                ],
+                [
+                    "pierce/#featureState"
+                ],
+                [
+                    "text/done"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Submit"
+                ],
+                [
+                    "input[type='submit']"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/form/input[3]"
+                ],
+                [
+                    "pierce/input[type='submit']"
+                ],
+                [
+                    "text/Submit"
+                ]
+            ],
+            "offsetY": 8.6875,
+            "offsetX": 75
+        },
+        {
+            "type": "doubleClick",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/×"
+                ],
+                [
+                    "div:nth-of-type(2) button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/div/div/div/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) button"
+                ],
+                [
+                    "text/×"
+                ]
+            ],
+            "offsetY": 91.27499389648438,
+            "offsetX": 385
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div:nth-of-type(2) > div div"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[2]/div"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) > div div"
+                ]
+            ],
+            "offsetY": 151.14999389648438,
+            "offsetX": 184.2624969482422
+        },
+        {
+            "type": "keyDown",
+            "target": "main",
+            "key": "2"
+        },
+        {
+            "type": "keyUp",
+            "key": "2",
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/View Tasks"
+                ],
+                [
+                    "table button.formSubmitButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[2]/div/button[3]"
+                ],
+                [
+                    "pierce/table button.formSubmitButton"
+                ],
+                [
+                    "text/View Tasks"
+                ]
+            ],
+            "offsetY": 20.83746337890625,
+            "offsetX": 40.824981689453125
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Add new"
+                ],
+                [
+                    "div:nth-of-type(2) button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) button"
+                ],
+                [
+                    "text/Add new"
+                ]
+            ],
+            "offsetY": 34.212493896484375,
+            "offsetX": 66
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Name"
+                ],
+                [
+                    "#taskName"
+                ],
+                [
+                    "xpath///*[@id=\"taskName\"]"
+                ],
+                [
+                    "pierce/#taskName"
+                ]
+            ],
+            "offsetY": 24.149993896484375,
+            "offsetX": 76
+        },
+        {
+            "type": "change",
+            "value": "aaa",
+            "selectors": [
+                [
+                    "aria/Name"
+                ],
+                [
+                    "#taskName"
+                ],
+                [
+                    "xpath///*[@id=\"taskName\"]"
+                ],
+                [
+                    "pierce/#taskName"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Priority"
+                ],
+                [
+                    "#taskPriority"
+                ],
+                [
+                    "xpath///*[@id=\"taskPriority\"]"
+                ],
+                [
+                    "pierce/#taskPriority"
+                ],
+                [
+                    "text/low"
+                ]
+            ],
+            "offsetY": 10.75,
+            "offsetX": 112
+        },
+        {
+            "type": "change",
+            "value": "medium",
+            "selectors": [
+                [
+                    "aria/Priority"
+                ],
+                [
+                    "#taskPriority"
+                ],
+                [
+                    "xpath///*[@id=\"taskPriority\"]"
+                ],
+                [
+                    "pierce/#taskPriority"
+                ],
+                [
+                    "text/low"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Estimated time"
+                ],
+                [
+                    "#taskEstimatedTime"
+                ],
+                [
+                    "xpath///*[@id=\"taskEstimatedTime\"]"
+                ],
+                [
+                    "pierce/#taskEstimatedTime"
+                ]
+            ],
+            "offsetY": 13.3499755859375,
+            "offsetX": 63
+        },
+        {
+            "type": "change",
+            "value": "2",
+            "selectors": [
+                [
+                    "aria/Estimated time"
+                ],
+                [
+                    "#taskEstimatedTime"
+                ],
+                [
+                    "xpath///*[@id=\"taskEstimatedTime\"]"
+                ],
+                [
+                    "pierce/#taskEstimatedTime"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Submit"
+                ],
+                [
+                    "input[type='submit']"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/form/input[3]"
+                ],
+                [
+                    "pierce/input[type='submit']"
+                ],
+                [
+                    "text/Submit"
+                ]
+            ],
+            "offsetY": 19.54998779296875,
+            "offsetX": 32
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/View more or update"
+                ],
+                [
+                    "table button.formSubmitButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[1]/div/button[1]"
+                ],
+                [
+                    "pierce/table button.formSubmitButton"
+                ],
+                [
+                    "text/View more or"
+                ]
+            ],
+            "offsetY": 28.83746337890625,
+            "offsetX": 58.73749542236328,
+            "duration": 375.7999999523163
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div:nth-of-type(2)"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]"
+                ],
+                [
+                    "pierce/div:nth-of-type(2)"
+                ]
+            ],
+            "offsetY": 23.599990844726562,
+            "offsetX": 193
+        },
+        {
+            "type": "doubleClick",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Update"
+                ],
+                [
+                    "div:nth-of-type(2) > button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) > button"
+                ],
+                [
+                    "text/Update"
+                ]
+            ],
+            "offsetY": 23.599990844726562,
+            "offsetX": 193
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Description"
+                ],
+                [
+                    "#taskDescription"
+                ],
+                [
+                    "xpath///*[@id=\"taskDescription\"]"
+                ],
+                [
+                    "pierce/#taskDescription"
+                ]
+            ],
+            "offsetY": 102.88748168945312,
+            "offsetX": 155
+        },
+        {
+            "type": "change",
+            "value": "ooo",
+            "selectors": [
+                [
+                    "aria/Description"
+                ],
+                [
+                    "#taskDescription"
+                ],
+                [
+                    "xpath///*[@id=\"taskDescription\"]"
+                ],
+                [
+                    "pierce/#taskDescription"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/State"
+                ],
+                [
+                    "#taskState"
+                ],
+                [
+                    "xpath///*[@id=\"taskState\"]"
+                ],
+                [
+                    "pierce/#taskState"
+                ],
+                [
+                    "text/todo"
+                ]
+            ],
+            "offsetY": 32.08746337890625,
+            "offsetX": 127
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/State"
+                ],
+                [
+                    "#taskState"
+                ],
+                [
+                    "xpath///*[@id=\"taskState\"]"
+                ],
+                [
+                    "pierce/#taskState"
+                ],
+                [
+                    "text/todo"
+                ]
+            ],
+            "offsetY": 17.08746337890625,
+            "offsetX": 91
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Assignee"
+                ],
+                [
+                    "#taskOwner"
+                ],
+                [
+                    "xpath///*[@id=\"taskOwner\"]"
+                ],
+                [
+                    "pierce/#taskOwner"
+                ]
+            ],
+            "offsetY": 38.6875,
+            "offsetX": 48
+        },
+        {
+            "type": "change",
+            "value": "developer",
+            "selectors": [
+                [
+                    "aria/Assignee"
+                ],
+                [
+                    "#taskOwner"
+                ],
+                [
+                    "xpath///*[@id=\"taskOwner\"]"
+                ],
+                [
+                    "pierce/#taskOwner"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Submit"
+                ],
+                [
+                    "input[type='submit']"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/form/input[6]"
+                ],
+                [
+                    "pierce/input[type='submit']"
+                ],
+                [
+                    "text/Submit"
+                ]
+            ],
+            "offsetY": 18.02496337890625,
+            "offsetX": 53
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/×"
+                ],
+                [
+                    "div:nth-of-type(2) button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/div/div/div/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) button"
+                ],
+                [
+                    "text/×"
+                ]
+            ],
+            "offsetY": 42.762481689453125,
+            "offsetX": 56.574981689453125
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Delete"
+                ],
+                [
+                    "button.formDeleteButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[2]/div/button[2]"
+                ],
+                [
+                    "pierce/button.formDeleteButton"
+                ],
+                [
+                    "text/Delete"
+                ]
+            ],
+            "offsetY": 22.83746337890625,
+            "offsetX": 24.149993896484375
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "td:nth-of-type(2) > div > div button.formDeleteButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[2]/div/div/div[1]/div/div/button[2]"
+                ],
+                [
+                    "pierce/td:nth-of-type(2) > div > div button.formDeleteButton"
+                ]
+            ],
+            "offsetY": 32.949981689453125,
+            "offsetX": 38.98748779296875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/← Back to features"
+                ],
+                [
+                    "a"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/a"
+                ],
+                [
+                    "pierce/a"
+                ],
+                [
+                    "text/← Back to features"
+                ]
+            ],
+            "offsetY": 1.412506103515625,
+            "offsetX": 112
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Delete"
+                ],
+                [
+                    "button.formDeleteButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[2]/div/button[2]"
+                ],
+                [
+                    "pierce/button.formDeleteButton"
+                ],
+                [
+                    "text/Delete"
+                ]
+            ],
+            "offsetY": 3.83746337890625,
+            "offsetX": 43.67498779296875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "td:nth-of-type(2) > div > div button.formDeleteButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div/table/tbody/tr/td[2]/div/div/div[1]/div/div/button[2]"
+                ],
+                [
+                    "pierce/td:nth-of-type(2) > div > div button.formDeleteButton"
+                ]
+            ],
+            "offsetY": 1.699981689453125,
+            "offsetX": 68.1875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/← Back to projects"
+                ],
+                [
+                    "a"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/a"
+                ],
+                [
+                    "pierce/a"
+                ],
+                [
+                    "text/← Back to projects"
+                ]
+            ],
+            "offsetY": 17.412506103515625,
+            "offsetX": 20
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Delete"
+                ],
+                [
+                    "button.formDeleteButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/table/tbody/tr/td[3]/button[2]"
+                ],
+                [
+                    "pierce/button.formDeleteButton"
+                ],
+                [
+                    "text/Delete"
+                ]
+            ],
+            "offsetY": 30.75,
+            "offsetX": 37.024993896484375
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div:nth-of-type(2) > div:nth-of-type(1) > div > div"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div[1]/div/div"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) > div:nth-of-type(1) > div > div"
+                ],
+                [
+                    "text/×Do you really"
+                ]
+            ],
+            "offsetY": 137.13748168945312,
+            "offsetX": 49.225006103515625
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div:nth-of-type(2) > div:nth-of-type(1) button.formDeleteButton"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div[1]/div/div/button[2]"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) > div:nth-of-type(1) button.formDeleteButton"
+                ]
+            ],
+            "offsetY": 10.337493896484375,
+            "offsetX": 33.42498779296875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/×"
+                ],
+                [
+                    "div:nth-of-type(2) > div:nth-of-type(2) button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[2]/div[2]/div/div/button"
+                ],
+                [
+                    "pierce/div:nth-of-type(2) > div:nth-of-type(2) button"
+                ]
+            ],
+            "offsetY": 28.6875,
+            "offsetX": 51.475006103515625
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Log out"
+                ],
+                [
+                    "#root > div:nth-of-type(1) > button"
+                ],
+                [
+                    "xpath///*[@id=\"root\"]/div[1]/button"
+                ],
+                [
+                    "pierce/#root > div:nth-of-type(1) > button"
+                ],
+                [
+                    "text/Log out"
+                ]
+            ],
+            "offsetY": 25.86248779296875,
+            "offsetX": 73.2874984741211
+        }
+    ]
+}

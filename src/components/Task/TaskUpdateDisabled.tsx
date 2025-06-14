@@ -1,10 +1,22 @@
 import { useNavigate, useParams } from "react-router";
-import { featureTasksPath, updateTaskPathId } from "../../lib/pathsNames";
+import {
+  featureTasksPath,
+  loginPagePath,
+  updateTaskPathId,
+} from "../../lib/pathsNames";
 import { database, Task, User } from "../../lib/data";
+import { useContext } from "react";
+import UserContext from "../../lib/UserContext";
 
 export default function TaskUpdateForm() {
   const navigate = useNavigate();
   const params = useParams();
+  const { state: userState } = useContext(UserContext);
+
+  if (userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   const nameInputName = "taskName";
   const descrInputName = "taskDescription";
@@ -20,15 +32,19 @@ export default function TaskUpdateForm() {
 
   return (
     <div>
-      <a onClick={() => navigate(featureTasksPath)}>
-        &larr; Back to all tasks
-      </a>
-      <button
-        className="formUpdateButton"
-        onClick={() => navigate(`${updateTaskPathId}/${task.id}`)}
-      >
-        Update
-      </button>
+      <a onClick={() => navigate(featureTasksPath)}>&larr; Back to all tasks</a>
+      {userState.activeUser.role === "admin" ||
+      userState.activeUser.role === "developer" ||
+      userState.activeUser.role === "devops" ? (
+        <button
+          className="formUpdateButton"
+          onClick={() => navigate(`${updateTaskPathId}/${task.id}`)}
+        >
+          Update
+        </button>
+      ) : (
+        <></>
+      )}
       <form>
         <h1>Task details</h1>
         <label htmlFor={nameInputName}>Name</label>
@@ -40,7 +56,8 @@ export default function TaskUpdateForm() {
           value={task.name}
         ></input>
         <label htmlFor={descrInputName}>Description</label>
-        <textarea disabled
+        <textarea
+          disabled
           id={descrInputName}
           name={descrInputName}
           value={task.description}
@@ -58,7 +75,8 @@ export default function TaskUpdateForm() {
           </option>
         </select>
         <label htmlFor={timeInputName}>Estimated time</label>
-        <input disabled
+        <input
+          disabled
           type="text"
           id={timeInputName}
           name={timeInputName}
@@ -103,7 +121,8 @@ export default function TaskUpdateForm() {
           value={task.addDate}
         ></input>
         <label htmlFor={startInputName}>Start date</label>
-        <input disabled
+        <input
+          disabled
           type="date"
           id={startInputName}
           name={startInputName}
@@ -111,7 +130,8 @@ export default function TaskUpdateForm() {
           min={task.addDate}
         ></input>
         <label htmlFor={endInputName}>End date</label>
-        <input disabled
+        <input
+          disabled
           type="date"
           id={endInputName}
           name={endInputName}

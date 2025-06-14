@@ -216,7 +216,8 @@ export class LocalStorageDatabase {
     for (const proj of projects) {
       if (proj.id === projectId) return proj;
     }
-    throw new Error("unreachable");
+    
+    return null;
   }
 
   public setActiveProject(project: Project): void {
@@ -232,7 +233,8 @@ export class LocalStorageDatabase {
     for (const feature of features) {
       if (feature.id === featureId) return feature;
     }
-    throw new Error("unreachable");
+    
+    return null;
   }
 
   public setActiveFeature(feature: Feature): void {
@@ -358,6 +360,7 @@ export type LoginParams = {
   surname: string;
   password: string;
   googleId?: string;
+  email?: string;
 };
 
 export type DataType = "project" | "user" | "feature" | "task";
@@ -436,6 +439,7 @@ export type User = {
   name: string;
   surname: string;
   role: UserRole;
+  email?: string;
   googleId?: string;
 };
 

@@ -24,7 +24,7 @@ function Modal({
       <div className="backdrop" style={style}>
         <div className="modal">
           <div className="modal-content">
-            <span
+            <button
               className="close"
               onClick={() => {
                 setStyle({ display: "none" });
@@ -32,7 +32,7 @@ function Modal({
               }}
             >
               &times;
-            </span>
+            </button>
             {children}
           </div>
         </div>

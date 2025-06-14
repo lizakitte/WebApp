@@ -1,13 +1,22 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { database, Feature, Task, User } from "../../lib/data";
-import { updateTaskDisabledPathId } from "../../lib/pathsNames";
-import { useState } from "react";
+import { loginPagePath, updateTaskDisabledPathId } from "../../lib/pathsNames";
+import { useContext, useState } from "react";
 import TaskDeleteForm from "./TaskDeleteForm";
+import UserContext from "../../lib/UserContext";
 
 function TaskDetails({ taskId }: { taskId?: string }) {
   const params = useParams();
   const navigate = useNavigate();
-    const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
+
+  const { state: userState } = useContext(UserContext);
+
+  const [deleteFeatureId, setDeleteFeatureId] = useState<string | null>(null);
+
+  if (userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   if (taskId === undefined) {
     taskId = params.taskId;
@@ -26,7 +35,7 @@ function TaskDetails({ taskId }: { taskId?: string }) {
 
   let owner: string;
   if (task.ownerId !== undefined) {
-    owner = database.getById<User>("user", task.ownerId)?.name ?? "No owner"
+    owner = database.getById<User>("user", task.ownerId)?.name ?? "No owner";
   } else {
     owner = "No owner";
   }
@@ -48,7 +57,9 @@ function TaskDetails({ taskId }: { taskId?: string }) {
 
   return (
     <div className="task">
-      {deleteFeatureId && <TaskDeleteForm taskId={deleteFeatureId}></TaskDeleteForm>}
+      {deleteFeatureId && (
+        <TaskDeleteForm taskId={deleteFeatureId}></TaskDeleteForm>
+      )}
       <h3>{task.name}</h3>
       <p>
         <span style={{ fontWeight: "bold" }}>Description: </span>
@@ -65,18 +76,37 @@ function TaskDetails({ taskId }: { taskId?: string }) {
         <span style={{ fontWeight: "bold" }}>Owner: </span>
         {owner}
       </p>
-      <button
-        className="formSubmitButton"
-        onClick={() => navigate(`${updateTaskDisabledPathId}/${task.id}`)}
-      >
-        View more or update
-      </button>
-      <button
-        className="formDeleteButton"
-        onClick={() => setDeleteFeatureId(task.id)}
-      >
-        Delete
-      </button>
+
+      {userState.activeUser.role === "admin" ||
+      userState.activeUser.role === "developer" ||
+      userState.activeUser.role === "devops" ? (
+        <button
+          className="formSubmitButton"
+          onClick={() => navigate(`${updateTaskDisabledPathId}/${task.id}`)}
+        >
+          View more or update
+        </button>
+      ) : (
+        <button
+          className="formSubmitButton"
+          onClick={() => navigate(`${updateTaskDisabledPathId}/${task.id}`)}
+        >
+          View more
+        </button>
+      )}
+
+      {userState.activeUser.role === "admin" ||
+      userState.activeUser.role === "developer" ||
+      userState.activeUser.role === "devops" ? (
+        <button
+          className="formDeleteButton"
+          onClick={() => setDeleteFeatureId(task.id)}
+        >
+          Delete
+        </button>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

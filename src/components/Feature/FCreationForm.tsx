@@ -2,17 +2,24 @@ import { FormEvent, useContext } from "react";
 import "../../styles/formStyle.css";
 import { useNavigate } from "react-router";
 import ProjectContext from "../../lib/ProjectContext";
-import { projectFeaturesPath } from "../../lib/pathsNames";
+import { loginPagePath, projectFeaturesPath } from "../../lib/pathsNames";
 import FeatureContext from "../../lib/FeatureContext";
+import UserContext from "../../lib/UserContext";
 
 function FCreationForm() {
   const navigate = useNavigate();
   const { state: projectState } = useContext(ProjectContext);
+  const { state: userState } = useContext(UserContext);
   const { dispatch: featureDispatch } = useContext(FeatureContext);
 
   const nameInputName = "featureName";
   const descrInputName = "featureDescription";
   const priorityInputName = "featurePriority";
+
+  if (userState.activeUser === undefined) {
+    navigate(loginPagePath);
+    return;
+  }
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -46,12 +53,12 @@ function FCreationForm() {
     const descr = descrInput.value;
     const priority = priorityInput.value;
 
-    if(priority !== "low" && priority !== "medium" && priority !== "high") {
-        throw new Error("Unknown priority!");
+    if (priority !== "low" && priority !== "medium" && priority !== "high") {
+      throw new Error("Unknown priority!");
     }
 
-    if(projectState.activeProject === undefined) {
-        throw new Error("No project is chosen as active!");
+    if (projectState.activeProject === undefined) {
+      throw new Error("No project is chosen as active!");
     }
 
     featureDispatch({
@@ -62,7 +69,7 @@ function FCreationForm() {
       projectId: projectState.activeProject!.id,
       startDate: new Date().toISOString().split("T")[0],
       state: "todo",
-  });
+    });
 
     fnameInput.value = "";
     descrInput.value = "";
@@ -71,34 +78,40 @@ function FCreationForm() {
 
   return (
     <>
-      <a onClick={() => navigate(projectFeaturesPath)}>&larr; Back to all features</a>
-      <form onSubmit={onSubmit}>
-        <h1>Create New Feature</h1>
-        <label htmlFor={nameInputName}>Name</label>
-        <input
-          type="text"
-          id={nameInputName}
-          name={nameInputName}
-          placeholder="Enter name..."
-        ></input>
-        <label htmlFor={descrInputName}>Description</label>
-        <textarea
-          id={descrInputName}
-          name={descrInputName}
-          placeholder="Enter description..."
-        ></textarea>
-        <label htmlFor={priorityInputName}>Priority</label>
-        <select id={priorityInputName} name={priorityInputName}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <input
-          type="submit"
-          className="formSubmitButton"
-          value="Submit"
-        ></input>
-      </form>
+      <a onClick={() => navigate(projectFeaturesPath)}>
+        &larr; Back to all features
+      </a>
+      {userState.activeUser.role === "admin" ? (
+        <form onSubmit={onSubmit}>
+          <h1>Create New Feature</h1>
+          <label htmlFor={nameInputName}>Name</label>
+          <input
+            type="text"
+            id={nameInputName}
+            name={nameInputName}
+            placeholder="Enter name..."
+          ></input>
+          <label htmlFor={descrInputName}>Description</label>
+          <textarea
+            id={descrInputName}
+            name={descrInputName}
+            placeholder="Enter description..."
+          ></textarea>
+          <label htmlFor={priorityInputName}>Priority</label>
+          <select id={priorityInputName} name={priorityInputName}>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <input
+            type="submit"
+            className="formSubmitButton"
+            value="Submit"
+          ></input>
+        </form>
+      ) : (
+        <h2>Can't reach</h2>
+      )}
     </>
   );
 }
